@@ -354,32 +354,80 @@
             </div>
           </div>
 
-          <!-- 레이어 4: 톤암 어셈블리 (베이스 타워 & 크롬 S자 파이프) -->
-          <div class="rounded-xl border border-indigo-500/20 bg-indigo-500/[0.03] overflow-hidden transition-all">
+          <!-- 레이어 4: 톤암 어셈블리 (베이스 타워 & 2종 스타일 파이프) -->
+          <div class="rounded-xl border border-indigo-500/30 bg-indigo-500/[0.04] overflow-hidden transition-all shadow-[0_0_12px_rgba(99,102,241,0.08)]">
             <div class="flex items-center justify-between p-1.5 hover:bg-indigo-500/10 cursor-pointer group select-none" id="btn-toggle-tonearm-sub">
               <div class="flex items-center gap-1.5 flex-1">
                 <i id="icon-tonearm-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5 text-indigo-400 transition-transform"></i>
-                <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
-                <span class="font-semibold text-indigo-200">톤암 기구 어셈블리</span>
+                <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_6px_#818cf8]"></span>
+                <span class="font-bold text-indigo-200">톤암 기구 어셈블리</span>
               </div>
-              <span class="text-[8px] font-mono text-indigo-300/80 bg-indigo-500/15 px-1 rounded mr-1">2 서브</span>
+              <span class="text-[8px] font-mono font-semibold text-indigo-300 bg-indigo-500/20 px-1.5 py-0.5 rounded border border-indigo-500/40 mr-1">2 스타일 & 부품</span>
             </div>
-            <!-- 톤암 서브 레이어 목록 -->
-            <div id="sublayer-tonearm-list" class="space-y-1 p-2 pt-1 border-t border-indigo-500/15 bg-black/40 text-[11px]">
-              <label class="flex items-center justify-between p-1 rounded hover:bg-white/5 cursor-pointer pl-2 border-l border-indigo-500/40">
+            <!-- 톤암 서브 레이어 목록 (부품 토글 & 2종 스타일 교체) -->
+            <div id="sublayer-tonearm-list" class="space-y-1.5 p-2 pt-1 border-t border-indigo-500/20 bg-black/50 text-[11px]">
+              <div class="text-[9px] text-zinc-400 flex items-center justify-between px-0.5 pb-0.5">
+                <span>어셈블리 파츠 표시/숨김</span>
+                <span class="text-indigo-400 font-mono">PARTS</span>
+              </div>
+              <label class="flex items-center justify-between p-1 rounded hover:bg-white/5 cursor-pointer pl-2 border-l-2 border-indigo-500/60 bg-white/[0.02]">
                 <span class="flex items-center gap-1.5 text-zinc-300">
                   <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
                   <span>톤암 베이스 & 짐벌 타워</span>
                 </span>
                 <input type="checkbox" id="layer-tonearm-base" checked class="w-3 h-3 accent-indigo-400 cursor-pointer rounded">
               </label>
-              <label class="flex items-center justify-between p-1 rounded hover:bg-white/5 cursor-pointer pl-2 border-l border-teal-400/40">
+              <label class="flex items-center justify-between p-1 rounded hover:bg-white/5 cursor-pointer pl-2 border-l-2 border-teal-400/60 bg-white/[0.02]">
                 <span class="flex items-center gap-1.5 text-zinc-300">
                   <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
-                  <span>3D 크롬 S자 파이프 & 무게추</span>
+                  <span>3D S자 파이프 & 무게추</span>
                 </span>
                 <input type="checkbox" id="layer-tonearm-pipe" checked class="w-3 h-3 accent-indigo-400 cursor-pointer rounded">
               </label>
+
+              <!-- 톤암 기구 2종 스타일 선택 (Hot-Swap) -->
+              <div class="text-[9px] text-zinc-400 flex items-center justify-between px-0.5 pt-2 border-t border-indigo-500/20">
+                <span>톤암 기구 스타일 선택</span>
+                <span class="text-indigo-400 font-mono font-bold">HOT-SWAP</span>
+              </div>
+
+              <!-- 스타일 1: 크롬 S (Chrome S) -->
+              <div data-tonearm-style="chrome_s" class="tonearm-style-item active flex items-center justify-between p-1.5 rounded-lg border border-teal-500/60 bg-teal-500/20 text-white cursor-pointer transition-all shadow-[0_0_8px_rgba(45,212,191,0.2)] group">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-md border border-white/25 bg-gradient-to-br from-slate-200 via-slate-400 to-slate-100 flex items-center justify-center text-xs shadow-inner shrink-0 text-slate-800">
+                    ✨
+                  </div>
+                  <div>
+                    <div class="font-bold text-[11px] leading-tight text-white flex items-center gap-1">
+                      <span>크롬 S (Chrome S)</span>
+                      <span class="text-[8px] px-1 py-0.2 rounded bg-slate-200 text-slate-900 font-semibold">오리지널</span>
+                    </div>
+                    <div class="text-[9px] text-zinc-400 leading-tight">미러 크롬 파이프 & 아치 짐벌</div>
+                  </div>
+                </div>
+                <span class="tonearm-check-icon w-3.5 h-3.5 text-teal-300 flex items-center">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                </span>
+              </div>
+
+              <!-- 스타일 2: 스텔스 매트 블랙 S (Technics SL-1500C / MK7) -->
+              <div data-tonearm-style="stealth_black" class="tonearm-style-item flex items-center justify-between p-1.5 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all text-zinc-300 group">
+                <div class="flex items-center gap-2">
+                  <div class="relative w-6 h-6 rounded-md overflow-hidden border border-zinc-700 bg-zinc-950 shrink-0">
+                    <img src="./stealth_black_tonearm.jpg" alt="Stealth Black Tonearm" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <div class="font-bold text-[11px] leading-tight text-zinc-200 flex items-center gap-1">
+                      <span>스텔스 매트 블랙 S</span>
+                      <span class="text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-semibold">NEW</span>
+                    </div>
+                    <div class="text-[9px] text-zinc-400 leading-tight">사틴 제트블랙 & 큐브 요크 & 투톤 링</div>
+                  </div>
+                </div>
+                <button class="btn-tonearm-photo-modal p-0.5 rounded bg-white/10 hover:bg-indigo-500 hover:text-black text-indigo-300 transition-colors" title="실물 사진 크게 보기" onclick="event.stopPropagation()">
+                  <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -591,6 +639,57 @@
               <span>이 실물 카트리지를 3D 턴테이블에 장착하기</span>
             </button>
             <button id="btn-modal-close-bottom" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-white/10 hover:bg-white/15 text-white transition-all">
+              닫기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 톤암 실물 사진 뷰어 고해상도 모달 (Tonearm Photo Modal) -->
+    <div id="tonearm-photo-modal" class="fixed inset-0 z-50 backdrop-blur-xl bg-black/85 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+      <div class="relative max-w-xl w-full bg-gradient-to-b from-zinc-900 to-zinc-950 border border-indigo-500/30 rounded-3xl p-6 shadow-2xl overflow-hidden flex flex-col items-center">
+        <!-- 모달 헤더 -->
+        <div class="w-full flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></span>
+            <h3 class="text-sm font-bold text-white tracking-wide">실물 톤암 어셈블리 레퍼런스 원본</h3>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">ORIGINAL PHOTO</span>
+          </div>
+          <button id="btn-close-tonearm-modal" class="p-1 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition-all" title="닫기">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- 실물 이미지 뷰 박스 -->
+        <div class="relative w-full rounded-2xl overflow-hidden bg-black/70 border border-white/10 flex items-center justify-center group shadow-inner">
+          <img id="tonearm-modal-img" src="./stealth_black_tonearm.jpg" alt="Technics SL-1500C / MK7 Matte Black Tonearm" class="max-h-72 object-contain rounded-xl transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute bottom-2 right-2 px-2.5 py-1 rounded-md bg-black/80 backdrop-blur text-[10px] text-zinc-300 border border-white/15 flex items-center gap-1.5">
+            <i data-lucide="camera" class="w-3 h-3 text-indigo-400"></i>
+            <span>Technics SL-1500C / MK7 Black Edition Tonearm</span>
+          </div>
+        </div>
+
+        <!-- 실물 분석 & 3D 장착 컨트롤 -->
+        <div class="w-full mt-4 space-y-3">
+          <div class="text-xs text-zinc-300 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5">
+            <p class="font-bold text-teal-300 mb-1 flex items-center gap-1.5">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5 text-teal-400"></i>
+              <span>사용자 제공 실물 사진 1:1 3D 정밀 구현 완료</span>
+            </p>
+            <p class="text-[11px] text-zinc-400 leading-relaxed">
+              • <strong>S자 톤암 파이프</strong>: 고급 사틴 제트블랙 아노다이징 알루미늄 파이프 (빛 반사율 0.72 PBR 정밀 튜닝)<br>
+              • <strong>헤드셀 칼라 링</strong>: 매트블랙 원통에 정밀 가공된 실버 크롬 널링 스트라이프 투톤 링 재현<br>
+              • <strong>모던 큐브 짐벌 요크</strong>: 각진 솔리드 큐브 블록 요크와 실버 피봇 볼트 디테일 탑재
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <button id="btn-modal-mount-tonearm" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-500 to-teal-400 text-slate-950 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:brightness-110 active:scale-95 transition-all">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              <span>이 스텔스 매트 블랙 톤암을 3D에 장착하기</span>
+            </button>
+            <button id="btn-modal-close-tonearm-bottom" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-white/10 hover:bg-white/15 text-white transition-all">
               닫기
             </button>
           </div>
@@ -1029,6 +1128,100 @@
     let tonearmCurrentTilt = 0;
     let isCueingUp = false;
     let tonearmPosState = 'rest'; // 'rest' | 'playing' | 'run_out'
+    // 톤암 어셈블리 2종 스타일 데이터베이스 (크롬 S & 스텔스 매트 블랙 S)
+    let currentTonearmStyle = 'chrome_s'; // 'chrome_s' | 'stealth_black'
+    const TONEARM_STYLES = {
+      'chrome_s': {
+        name: '크롬 S (Chrome S)',
+        desc: '테크닉스 오리지널 미러 크롬 파이프 & 실버 아치 짐벌 요크',
+        pipeColor: 0xf8fafc,
+        pipeMetalness: 0.98,
+        pipeRoughness: 0.05,
+        yokeColor: 0xe2e8f0,
+        yokeMetalness: 0.92,
+        yokeRoughness: 0.18,
+        yokeType: 'arch',
+        collarColor: 0xcfd6e2,
+        collarRingColor: 0x12151d,
+        barrelColor: 0x12151d,
+        barrelMetalness: 0.60,
+        barrelRoughness: 0.40,
+        dialColor: 0xcfd6e2
+      },
+      'stealth_black': {
+        name: '스텔스 매트 블랙 S (Stealth Matte Black S)',
+        desc: 'SL-1500C / MK7 블랙 에디션 사틴 제트블랙 파이프 & 투톤 크롬 링 & 큐브 요크',
+        pipeColor: 0x181a20,
+        pipeMetalness: 0.72,
+        pipeRoughness: 0.38,
+        yokeColor: 0x14161d,
+        yokeMetalness: 0.60,
+        yokeRoughness: 0.42,
+        yokeType: 'cube',
+        collarColor: 0x161820,
+        collarRingColor: 0xf8fafc, // 투톤 크롬 널링 스트라이프
+        barrelColor: 0x15171e,
+        barrelMetalness: 0.75,
+        barrelRoughness: 0.38,
+        dialColor: 0x181a22
+      }
+    };
+
+    function switchTonearmStyle(styleKey) {
+      if (!TONEARM_STYLES[styleKey]) return;
+      currentTonearmStyle = styleKey;
+
+      // 1. 기존 톤암 그룹 제거
+      if (tonearmArmGroup) {
+        turntableGroup.remove(tonearmArmGroup);
+      }
+      if (tonearmBaseGroup) {
+        turntableGroup.remove(tonearmBaseGroup);
+      }
+
+      // 2. 새 스타일로 베이스 및 암 리빌드
+      buildTonearmBase();
+      buildTonearmArm();
+
+      // 3. 현재 각도 및 틸트 복원
+      if (tonearmArmGroup) {
+        tonearmArmGroup.rotation.y = tonearmCurrentAngle;
+      }
+      if (tonearmCueGroup) {
+        tonearmCueGroup.rotation.x = tonearmCurrentTilt;
+      }
+
+      // 4. 레이어 가시성 플래그 동기화
+      const chkPipe = document.getElementById('layer-tonearm-pipe');
+      if (chkPipe && tonearmArmGroup) {
+        tonearmArmGroup.visible = chkPipe.checked;
+      }
+      const chkBase = document.getElementById('layer-tonearm-base');
+      if (chkBase && tonearmBaseGroup) {
+        tonearmBaseGroup.visible = chkBase.checked;
+      }
+
+      // 5. UI 활성 상태 동기화
+      const styleItems = document.querySelectorAll('.tonearm-style-item');
+      styleItems.forEach(item => {
+        const isCur = item.getAttribute('data-tonearm-style') === styleKey;
+        if (isCur) {
+          item.className = 'tonearm-style-item active flex items-center justify-between p-1.5 rounded-lg border border-teal-500/60 bg-teal-500/20 text-white cursor-pointer transition-all shadow-[0_0_8px_rgba(45,212,191,0.2)] group';
+          let checkIcon = item.querySelector('.tonearm-check-icon');
+          if (!checkIcon) {
+            const checkSpan = document.createElement('span');
+            checkSpan.className = 'tonearm-check-icon w-3.5 h-3.5 text-teal-300 flex items-center';
+            checkSpan.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i>';
+            item.appendChild(checkSpan);
+          }
+        } else {
+          item.className = 'tonearm-style-item flex items-center justify-between p-1.5 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all text-zinc-300 group';
+          const checkIcon = item.querySelector('.tonearm-check-icon');
+          if (checkIcon) checkIcon.remove();
+        }
+      });
+      lucide.createIcons();
+    }
 
     // 6종 명품 카트리지 사운드 & 기구 스펙 데이터베이스 (실물 사진 반영 Shure M75ED 포함)
     let currentCartridgeKey = 'shure_m75ed';
@@ -1791,16 +1984,18 @@
       tonearmBaseGroup.position.set(PIVOT_CENTER_X, 49.5, PIVOT_CENTER_Z);
       turntableGroup.add(tonearmBaseGroup);
 
+      const style = TONEARM_STYLES[currentTonearmStyle] || TONEARM_STYLES['chrome_s'];
+
       const chromeMat = new THREE.MeshStandardMaterial({
         color: 0xf8fafc,
         metalness: 0.98,
         roughness: 0.08
       });
 
-      const silverGimbalMat = new THREE.MeshStandardMaterial({
-        color: 0xe2e8f0,
-        metalness: 0.92,
-        roughness: 0.18
+      const yokeMat = new THREE.MeshStandardMaterial({
+        color: style.yokeColor,
+        metalness: style.yokeMetalness,
+        roughness: style.yokeRoughness
       });
 
       const darkGimbalMat = new THREE.MeshStandardMaterial({
@@ -1833,12 +2028,12 @@
       tonearmBaseGroup.add(vtaRing);
 
       // 상단 크롬 널링 악센트 림 (지름 85mm, 높이 2mm)
-      const vtaTopRim = new THREE.Mesh(new THREE.CylinderGeometry(42.5, 42.5, 2, 48), chromeMat);
+      const vtaTopRim = new THREE.Mesh(new THREE.CylinderGeometry(42.5, 42.5, 2, 48), currentTonearmStyle === 'stealth_black' ? darkGimbalMat : chromeMat);
       vtaTopRim.position.y = 13.5;
       tonearmBaseGroup.add(vtaTopRim);
 
       // -------------------------------------------------------------
-      // (2) 테크닉스 실버 아치형 짐벌 요크 (Gimbal Yoke Frame)
+      // (2) 짐벌 요크 프레임 (아치형 또는 모던 큐브형)
       // -------------------------------------------------------------
       const gimbalYokeGroup = new THREE.Group();
       gimbalYokeGroup.position.y = 14.5;
@@ -1846,40 +2041,52 @@
 
       // 짐벌 중심 베이스 링
       const yokeBaseGeo = new THREE.CylinderGeometry(22, 24, 6, 36);
-      const yokeBase = new THREE.Mesh(yokeBaseGeo, silverGimbalMat);
+      const yokeBase = new THREE.Mesh(yokeBaseGeo, yokeMat);
       yokeBase.position.y = 3;
       gimbalYokeGroup.add(yokeBase);
 
-      // 좌측 수직 기둥 (X = -15)
-      const pillarLeftGeo = new THREE.BoxGeometry(6, 26, 9);
-      const pillarLeft = new THREE.Mesh(pillarLeftGeo, silverGimbalMat);
-      pillarLeft.position.set(-15, 17, 0);
-      pillarLeft.castShadow = true;
-      gimbalYokeGroup.add(pillarLeft);
+      if (style.yokeType === 'cube') {
+        // 실물 사진 기반 매트 블랙 큐브 짐벌 블록 (SL-1500C / MK7 블랙 에디션)
+        const cubeYokeGeo = new THREE.BoxGeometry(28, 25, 14);
+        const cubeYoke = new THREE.Mesh(cubeYokeGeo, yokeMat);
+        cubeYoke.position.set(0, 18, 0);
+        cubeYoke.castShadow = true;
+        gimbalYokeGroup.add(cubeYoke);
 
-      // 우측 수직 기둥 (X = +15)
-      const pillarRightGeo = new THREE.BoxGeometry(6, 26, 9);
-      const pillarRight = new THREE.Mesh(pillarRightGeo, silverGimbalMat);
-      pillarRight.position.set(15, 17, 0);
-      pillarRight.castShadow = true;
-      gimbalYokeGroup.add(pillarRight);
+        // 상단 피봇 나사 & 실버 볼트 캡
+        const topScrewGeo = new THREE.CylinderGeometry(4.5, 4.5, 2.5, 24);
+        const topScrew = new THREE.Mesh(topScrewGeo, chromeMat);
+        topScrew.position.y = 31.5;
+        gimbalYokeGroup.add(topScrew);
+      } else {
+        // 기존 테크닉스 실버 클래식 아치형 짐벌 요크
+        const pillarLeftGeo = new THREE.BoxGeometry(6, 26, 9);
+        const pillarLeft = new THREE.Mesh(pillarLeftGeo, yokeMat);
+        pillarLeft.position.set(-15, 17, 0);
+        pillarLeft.castShadow = true;
+        gimbalYokeGroup.add(pillarLeft);
 
-      // 상부 아치 브리지
-      const yokeArchGeo = new THREE.BoxGeometry(36, 6, 9);
-      const yokeArch = new THREE.Mesh(yokeArchGeo, silverGimbalMat);
-      yokeArch.position.set(0, 31, 0);
-      yokeArch.castShadow = true;
-      gimbalYokeGroup.add(yokeArch);
+        const pillarRightGeo = new THREE.BoxGeometry(6, 26, 9);
+        const pillarRight = new THREE.Mesh(pillarRightGeo, yokeMat);
+        pillarRight.position.set(15, 17, 0);
+        pillarRight.castShadow = true;
+        gimbalYokeGroup.add(pillarRight);
 
-      // 상단 수직 피봇 크롬 스크루 & 볼트 캡
-      const topScrewGeo = new THREE.CylinderGeometry(6, 6, 3, 24);
-      const topScrew = new THREE.Mesh(topScrewGeo, chromeMat);
-      topScrew.position.y = 34.5;
-      gimbalYokeGroup.add(topScrew);
+        const yokeArchGeo = new THREE.BoxGeometry(36, 6, 9);
+        const yokeArch = new THREE.Mesh(yokeArchGeo, yokeMat);
+        yokeArch.position.set(0, 31, 0);
+        yokeArch.castShadow = true;
+        gimbalYokeGroup.add(yokeArch);
 
-      const topScrewDot = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 1.5, 16), chromeMat);
-      topScrewDot.position.y = 36.5;
-      gimbalYokeGroup.add(topScrewDot);
+        const topScrewGeo = new THREE.CylinderGeometry(6, 6, 3, 24);
+        const topScrew = new THREE.Mesh(topScrewGeo, chromeMat);
+        topScrew.position.y = 34.5;
+        gimbalYokeGroup.add(topScrew);
+
+        const topScrewDot = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 1.5, 16), chromeMat);
+        topScrewDot.position.y = 36.5;
+        gimbalYokeGroup.add(topScrewDot);
+      }
 
       // 좌우 수평 피봇 크롬 베어링 나사 2개
       const horizScrewGeo = new THREE.CylinderGeometry(3.5, 3.5, 2.5, 20);
@@ -1983,7 +2190,15 @@
       tonearmCueGroup = new THREE.Group();
       tonearmArmGroup.add(tonearmCueGroup);
 
-      // 고품질 PBR 머티리얼 정의
+      const style = TONEARM_STYLES[currentTonearmStyle] || TONEARM_STYLES['chrome_s'];
+
+      // 고품질 PBR 머티리얼 정의 (스타일 실시간 반영)
+      const pipeMat = new THREE.MeshStandardMaterial({
+        color: style.pipeColor,
+        metalness: style.pipeMetalness,
+        roughness: style.pipeRoughness
+      });
+
       const mirrorChromeMat = new THREE.MeshStandardMaterial({
         color: 0xf8fafc,
         metalness: 0.98,
@@ -2003,9 +2218,9 @@
       });
 
       const dialSilverMat = new THREE.MeshStandardMaterial({
-        color: 0xcfd6e2,
-        metalness: 0.92,
-        roughness: 0.20
+        color: style.dialColor,
+        metalness: currentTonearmStyle === 'stealth_black' ? 0.4 : 0.90,
+        roughness: currentTonearmStyle === 'stealth_black' ? 0.45 : 0.20
       });
 
       const goldBoltMat = new THREE.MeshStandardMaterial({
@@ -2020,12 +2235,6 @@
         roughness: 0.25
       });
 
-      const cartridgeRedMat = new THREE.MeshStandardMaterial({
-        color: 0xdc2626, // Ortofon Red
-        metalness: 0.3,
-        roughness: 0.35
-      });
-
       const diamondStylusMat = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         metalness: 0.1,
@@ -2038,7 +2247,7 @@
       // (1) 짐벌 피봇 코어 블록 & 좌우 수평 피봇 핀
       // -------------------------------------------------------------
       const coreGeo = new THREE.BoxGeometry(11, 11, 11);
-      const coreMesh = new THREE.Mesh(coreGeo, brushedSilverMat);
+      const coreMesh = new THREE.Mesh(coreGeo, currentTonearmStyle === 'stealth_black' ? darkGimbalMat : brushedSilverMat);
       tonearmCueGroup.add(coreMesh);
 
       const pinGeo = new THREE.CylinderGeometry(1.8, 1.8, 27, 16);
@@ -2052,17 +2261,17 @@
       // 후방 스테인리스 샤프트 스터브 축 (Z방향 뒤쪽 -Z)
       const stubGeo = new THREE.CylinderGeometry(4.2, 4.2, 54, 24);
       stubGeo.rotateX(Math.PI / 2);
-      const stubMesh = new THREE.Mesh(stubGeo, brushedSilverMat);
+      const stubMesh = new THREE.Mesh(stubGeo, currentTonearmStyle === 'stealth_black' ? darkGimbalMat : brushedSilverMat);
       stubMesh.position.z = -27;
       stubMesh.castShadow = true;
       tonearmCueGroup.add(stubMesh);
 
-      const stubCap = new THREE.Mesh(new THREE.CylinderGeometry(3.6, 3.6, 3, 20), mirrorChromeMat);
+      const stubCap = new THREE.Mesh(new THREE.CylinderGeometry(3.6, 3.6, 3, 20), currentTonearmStyle === 'stealth_black' ? darkGimbalMat : mirrorChromeMat);
       stubCap.rotateX(Math.PI / 2);
       stubCap.position.z = -54;
       tonearmCueGroup.add(stubCap);
 
-      // 브러시드 실버 침압 스케일 눈금 다이얼 링
+      // 침압 스케일 눈금 다이얼 링
       const dialGeo = new THREE.CylinderGeometry(15, 15, 7, 36);
       dialGeo.rotateX(Math.PI / 2);
       const dialMesh = new THREE.Mesh(dialGeo, dialSilverMat);
@@ -2077,20 +2286,24 @@
       // 메인 헤비 카운터웨이트 배럴 (지름 38mm, 길이 22mm, 침압 연동 위치 조정)
       const barrelGeo = new THREE.CylinderGeometry(19, 19, 22, 36);
       barrelGeo.rotateX(Math.PI / 2);
-      counterweightBarrelMesh = new THREE.Mesh(barrelGeo, darkGimbalMat);
+      const barrelMat = new THREE.MeshStandardMaterial({
+        color: style.barrelColor,
+        metalness: style.barrelMetalness,
+        roughness: style.barrelRoughness
+      });
+      counterweightBarrelMesh = new THREE.Mesh(barrelGeo, barrelMat);
       counterweightBarrelMesh.position.z = -36;
       counterweightBarrelMesh.castShadow = true;
       tonearmCueGroup.add(counterweightBarrelMesh);
 
-      const barrelChamfer = new THREE.Mesh(new THREE.CylinderGeometry(16, 19, 4, 36), brushedSilverMat);
+      const barrelChamfer = new THREE.Mesh(new THREE.CylinderGeometry(16, 19, 4, 36), currentTonearmStyle === 'stealth_black' ? barrelMat : brushedSilverMat);
       barrelChamfer.rotateX(Math.PI / 2);
       barrelChamfer.position.z = -12;
       counterweightBarrelMesh.add(barrelChamfer);
 
       // -------------------------------------------------------------
-      // (3) 전방 3D 고광택 크롬 S자 파이프 (CatmullRomCurve3 & TubeGeometry)
+      // (3) 전방 3D S자 파이프 (크롬 또는 스텔스 매트 블랙 아노다이징)
       // -------------------------------------------------------------
-      // 짐벌 중심(0,0,0)에서 출발하여 암레스트를 거쳐 음반으로 유려하게 S자로 뻗어나감
       const pipePoints = [
         new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(0, -0.6, 20),
@@ -2101,7 +2314,7 @@
       ];
       const pipeCurve = new THREE.CatmullRomCurve3(pipePoints, false, 'catmullrom', 0.5);
       const pipeGeo = new THREE.TubeGeometry(pipeCurve, 64, 2.25, 20, false);
-      const pipeMesh = new THREE.Mesh(pipeGeo, mirrorChromeMat);
+      const pipeMesh = new THREE.Mesh(pipeGeo, pipeMat);
       pipeMesh.castShadow = true;
       tonearmCueGroup.add(pipeMesh);
 
@@ -2114,14 +2327,25 @@
       const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), tangent);
       collarGroup.quaternion.copy(quat);
 
-      // 널링 록킹 링
+      // 널링 록킹 링 바디
       const collarGeo = new THREE.CylinderGeometry(3.6, 3.6, 5.5, 24);
       collarGeo.rotateX(Math.PI / 2);
-      const collarMesh = new THREE.Mesh(collarGeo, dialSilverMat);
+      const collarMat = new THREE.MeshStandardMaterial({
+        color: style.collarColor,
+        metalness: currentTonearmStyle === 'stealth_black' ? 0.75 : 0.92,
+        roughness: currentTonearmStyle === 'stealth_black' ? 0.35 : 0.20
+      });
+      const collarMesh = new THREE.Mesh(collarGeo, collarMat);
       collarMesh.position.z = 2.75;
       collarGroup.add(collarMesh);
 
-      const collarWasher = new THREE.Mesh(new THREE.CylinderGeometry(3.8, 3.8, 1.2, 24), darkGimbalMat);
+      // 투톤 크롬 널링 스트라이프 링 (실물 사진 속 크롬 링 디테일)
+      const collarRingMat = new THREE.MeshStandardMaterial({
+        color: style.collarRingColor,
+        metalness: currentTonearmStyle === 'stealth_black' ? 0.98 : 0.6,
+        roughness: currentTonearmStyle === 'stealth_black' ? 0.08 : 0.4
+      });
+      const collarWasher = new THREE.Mesh(new THREE.CylinderGeometry(3.8, 3.8, 1.2, 24), collarRingMat);
       collarWasher.rotateX(Math.PI / 2);
       collarWasher.position.z = 1.5;
       collarGroup.add(collarWasher);
@@ -3273,7 +3497,18 @@
         });
       });
 
-      // 서브 레이어 내 실물 사진 모달 열기 버튼 이벤트
+      // 3. 우측 컴포넌트 레이어 내 톤암 2종 스타일(크롬 S / 스텔스 매트 블랙 S) 선택 이벤트
+      document.querySelectorAll('.tonearm-style-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('.btn-tonearm-photo-modal')) return;
+          const styleKey = item.getAttribute('data-tonearm-style');
+          if (styleKey) {
+            switchTonearmStyle(styleKey);
+          }
+        });
+      });
+
+      // 서브 레이어 내 실물 카트리지 사진 모달 열기 버튼 이벤트
       document.querySelectorAll('.btn-sub-photo-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -3281,7 +3516,7 @@
         });
       });
 
-      // 실물 사진 고해상도 모달 열기/닫기 제어
+      // 실물 카트리지 사진 고해상도 모달 열기/닫기 제어
       const photoModal = document.getElementById('photo-modal');
       const openModal = () => {
         if (!photoModal) return;
@@ -3326,6 +3561,46 @@
         btnModalMount.addEventListener('click', () => {
           mountCartridge('shure_m75ed');
           closeModal();
+        });
+      }
+
+      // 4. 실물 톤암 사진 고해상도 모달 열기/닫기 제어
+      const tonearmPhotoModal = document.getElementById('tonearm-photo-modal');
+      const openTonearmModal = () => {
+        if (!tonearmPhotoModal) return;
+        tonearmPhotoModal.classList.remove('opacity-0', 'pointer-events-none');
+        tonearmPhotoModal.classList.add('opacity-100', 'pointer-events-auto');
+      };
+      const closeTonearmModal = () => {
+        if (!tonearmPhotoModal) return;
+        tonearmPhotoModal.classList.remove('opacity-100', 'pointer-events-auto');
+        tonearmPhotoModal.classList.add('opacity-0', 'pointer-events-none');
+      };
+
+      document.querySelectorAll('.btn-tonearm-photo-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openTonearmModal();
+        });
+      });
+
+      const btnCloseTonearmModal = document.getElementById('btn-close-tonearm-modal');
+      if (btnCloseTonearmModal) btnCloseTonearmModal.addEventListener('click', closeTonearmModal);
+
+      const btnCloseTonearmBottom = document.getElementById('btn-modal-close-tonearm-bottom');
+      if (btnCloseTonearmBottom) btnCloseTonearmBottom.addEventListener('click', closeTonearmModal);
+
+      if (tonearmPhotoModal) {
+        tonearmPhotoModal.addEventListener('click', (e) => {
+          if (e.target === tonearmPhotoModal) closeTonearmModal();
+        });
+      }
+
+      const btnModalMountTonearm = document.getElementById('btn-modal-mount-tonearm');
+      if (btnModalMountTonearm) {
+        btnModalMountTonearm.addEventListener('click', () => {
+          switchTonearmStyle('stealth_black');
+          closeTonearmModal();
         });
       }
 
