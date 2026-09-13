@@ -2306,36 +2306,29 @@
       counterweightBarrelMesh.add(barrelChamfer);
 
       // -------------------------------------------------------------
-      // (3) 전방 3D 파이프 (오리지널 크롬 S자 vs 실물 사진 사양 딥 블랙 S-Curve)
+      // (3) 전방 3D 파이프 (실물 다이어그램 기반 정밀 2-Bend 톤암 지오메트리)
       // -------------------------------------------------------------
-      let pipePoints;
-      let pipeRadius = 2.25;
-      if (currentTonearmStyle === 'stealth_black') {
-        // 실물 사진 1:1 정밀 반영 (무게추 상단 기준: 우측 휨 -> 중앙 하강 -> 좌측 휨 딥 블랙 S-Curve)
-        pipePoints = [
-          new THREE.Vector3(0, 0, 0),          // 피봇 짐벌 코어 (0,0,0)
-          new THREE.Vector3(3.5, -0.6, 25),    // 피봇에서 나와 우측으로 유연하게 선회
-          new THREE.Vector3(13.0, -1.8, 65),   // [1단계: 우측 휨] 과감하고 풍만한 우측 볼록 아크
-          new THREE.Vector3(8.5, -3.2, 115),   // [2단계: 하강 구간] 중앙을 향해 시원하게 뻗어 내려옴
-          new THREE.Vector3(-1.0, -4.0, 150),  // 중앙선 관통하며 좌측 만곡 진입
-          new THREE.Vector3(-8.8, -4.8, 178),  // [3단계: 좌측 휨] 플래터/헤드셀을 향해 뚜렷하게 좌측으로 휨
-          new THREE.Vector3(-4.5, -5.5, 198)   // H-4 칼라 결합부 (다이아몬드 바늘 착지면 & 트래킹 100% 호환)
-        ];
-        pipeRadius = 2.38; // 묵직하고 단단한 사틴 블랙 아노다이징 파이프 볼륨감
-      } else {
-        // 오리지널 테크닉스 크롬 S자 파이프
-        pipePoints = [
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0, -0.6, 20),
-          new THREE.Vector3(9.5, -1.8, 62),
-          new THREE.Vector3(7.5, -3.2, 122),
-          new THREE.Vector3(-7.5, -4.6, 178),
-          new THREE.Vector3(-4.5, -5.5, 198)
-        ];
-        pipeRadius = 2.25;
-      }
+      // 다이어그램 1:1 반영:
+      // 1. 피봇(0,0,0)에서 출구 직진 (Z: 0 -> 16mm)
+      // 2. 우측 벤드 (1차 벤드): 암레스트 부근까지 우측으로 유연하게 꺾임 (Z: 16 -> 75mm, X: 0 -> +14.8mm)
+      // 3. 중간 긴 직선 하강부: 우측에서 대각선 사선으로 곧게 뻗어 내려옴 (Z: 75 -> 178mm, X: +14.8 -> +0.5mm)
+      // 4. 좌측 벤드 (2차 벤드): 칼라 결합부 직전에서 좌측으로 꺾임 (Z: 178 -> 198mm, X: +0.5 -> -4.8mm)
+      const pipePoints = [
+        new THREE.Vector3(0, 0, 0),          // 피봇 짐벌 코어 (0,0,0)
+        new THREE.Vector3(0.8, -0.4, 16),    // 피봇 출구 직진
+        new THREE.Vector3(5.2, -0.9, 34),    // [1단계: 1차 우측 벤드 시작]
+        new THREE.Vector3(11.8, -1.6, 56),   // 우측 선회
+        new THREE.Vector3(14.8, -2.2, 75),   // [1차 벤드 정점 / 우측 볼록 아크 완료]
+        new THREE.Vector3(11.2, -3.2, 115),  // [2단계: 중간 긴 직선 하강 구간]
+        new THREE.Vector3(5.5, -4.2, 155),   // 시원하게 뻗어 내려오는 직선 파이프
+        new THREE.Vector3(0.5, -4.8, 178),   // 중앙선 통과
+        new THREE.Vector3(-3.2, -5.2, 190),  // [3단계: 2차 좌측 벤드] 플래터/헤드셀 방향으로 꺾임
+        new THREE.Vector3(-4.8, -5.5, 198)   // [4단계: H-4 칼라 연결부] (헤드셀 및 소리골 트래킹 100% 호환)
+      ];
+
+      const pipeRadius = currentTonearmStyle === 'stealth_black' ? 2.38 : 2.28;
       const pipeCurve = new THREE.CatmullRomCurve3(pipePoints, false, 'catmullrom', 0.5);
-      const pipeGeo = new THREE.TubeGeometry(pipeCurve, 64, pipeRadius, 20, false);
+      const pipeGeo = new THREE.TubeGeometry(pipeCurve, 96, pipeRadius, 24, false);
       const pipeMesh = new THREE.Mesh(pipeGeo, pipeMat);
       pipeMesh.castShadow = true;
       tonearmCueGroup.add(pipeMesh);
@@ -2343,8 +2336,9 @@
       // -------------------------------------------------------------
       // (4) H-4 베이오넷 커넥터 칼라 (Locking Nut Collar)
       // -------------------------------------------------------------
+      const collarPos = pipeCurve.getPoint(1);
       const collarGroup = new THREE.Group();
-      collarGroup.position.set(-4.5, -5.5, 198);
+      collarGroup.position.copy(collarPos);
       const tangent = pipeCurve.getTangent(1).normalize();
       const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), tangent);
       collarGroup.quaternion.copy(quat);
