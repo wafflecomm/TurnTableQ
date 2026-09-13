@@ -410,7 +410,7 @@
                 </span>
               </div>
 
-              <!-- 스타일 2: 스텔스 매트 블랙 S (Technics SL-1500C / MK7) -->
+              <!-- 스타일 2: 스텔스 매트 블랙 J (Technics SL-1500C / MK7) -->
               <div data-tonearm-style="stealth_black" class="tonearm-style-item flex items-center justify-between p-1.5 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all text-zinc-300 group">
                 <div class="flex items-center gap-2">
                   <div class="relative w-6 h-6 rounded-md overflow-hidden border border-zinc-700 bg-zinc-950 shrink-0">
@@ -418,10 +418,10 @@
                   </div>
                   <div>
                     <div class="font-bold text-[11px] leading-tight text-zinc-200 flex items-center gap-1">
-                      <span>스텔스 매트 블랙 S</span>
-                      <span class="text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-semibold">NEW</span>
+                      <span>스텔스 매트 블랙 J</span>
+                      <span class="text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-semibold">실물 J-Shape</span>
                     </div>
-                    <div class="text-[9px] text-zinc-400 leading-tight">사틴 제트블랙 & 큐브 요크 & 투톤 링</div>
+                    <div class="text-[9px] text-zinc-400 leading-tight">사틴 제트블랙 J자 파이프 & 큐브 요크</div>
                   </div>
                 </div>
                 <button class="btn-tonearm-photo-modal p-0.5 rounded bg-white/10 hover:bg-indigo-500 hover:text-black text-indigo-300 transition-colors" title="실물 사진 크게 보기" onclick="event.stopPropagation()">
@@ -678,7 +678,7 @@
               <span>사용자 제공 실물 사진 1:1 3D 정밀 구현 완료</span>
             </p>
             <p class="text-[11px] text-zinc-400 leading-relaxed">
-              • <strong>S자 톤암 파이프</strong>: 고급 사틴 제트블랙 아노다이징 알루미늄 파이프 (빛 반사율 0.72 PBR 정밀 튜닝)<br>
+              • <strong>J자 톤암 파이프 (J-Shape)</strong>: 실물 사진 속 SL-1500C 특유의 모던 싱글 벤드 파이프 (피봇-암레스트 직선 구간 + 유려한 단일 곡선, 반사율 0.72 PBR 정밀 튜닝)<br>
               • <strong>헤드셀 칼라 링</strong>: 매트블랙 원통에 정밀 가공된 실버 크롬 널링 스트라이프 투톤 링 재현<br>
               • <strong>모던 큐브 짐벌 요크</strong>: 각진 솔리드 큐브 블록 요크와 실버 피봇 볼트 디테일 탑재
             </p>
@@ -687,7 +687,7 @@
           <div class="flex items-center gap-2 pt-1">
             <button id="btn-modal-mount-tonearm" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-500 to-teal-400 text-slate-950 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:brightness-110 active:scale-95 transition-all">
               <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-              <span>이 스텔스 매트 블랙 톤암을 3D에 장착하기</span>
+              <span>이 스텔스 매트 블랙 J-톤암을 3D에 장착하기</span>
             </button>
             <button id="btn-modal-close-tonearm-bottom" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-white/10 hover:bg-white/15 text-white transition-all">
               닫기
@@ -1128,12 +1128,13 @@
     let tonearmCurrentTilt = 0;
     let isCueingUp = false;
     let tonearmPosState = 'rest'; // 'rest' | 'playing' | 'run_out'
-    // 톤암 어셈블리 2종 스타일 데이터베이스 (크롬 S & 스텔스 매트 블랙 S)
+    // 톤암 어셈블리 2종 스타일 데이터베이스 (크롬 S & 스텔스 매트 블랙 J)
     let currentTonearmStyle = 'chrome_s'; // 'chrome_s' | 'stealth_black'
     const TONEARM_STYLES = {
       'chrome_s': {
         name: '크롬 S (Chrome S)',
-        desc: '테크닉스 오리지널 미러 크롬 파이프 & 실버 아치 짐벌 요크',
+        desc: '테크닉스 오리지널 더블 커브 미러 크롬 S자 파이프 & 실버 아치 짐벌 요크',
+        pipeShape: 's_shape',
         pipeColor: 0xf8fafc,
         pipeMetalness: 0.98,
         pipeRoughness: 0.05,
@@ -1149,8 +1150,9 @@
         dialColor: 0xcfd6e2
       },
       'stealth_black': {
-        name: '스텔스 매트 블랙 S (Stealth Matte Black S)',
-        desc: 'SL-1500C / MK7 블랙 에디션 사틴 제트블랙 파이프 & 투톤 크롬 링 & 큐브 요크',
+        name: '스텔스 매트 블랙 J (Stealth Matte Black J)',
+        desc: 'SL-1500C / MK7 블랙 에디션 사틴 제트블랙 J자 싱글 벤드 파이프 & 투톤 크롬 링 & 큐브 요크',
+        pipeShape: 'j_shape',
         pipeColor: 0x181a20,
         pipeMetalness: 0.72,
         pipeRoughness: 0.38,
@@ -2302,16 +2304,32 @@
       counterweightBarrelMesh.add(barrelChamfer);
 
       // -------------------------------------------------------------
-      // (3) 전방 3D S자 파이프 (크롬 또는 스텔스 매트 블랙 아노다이징)
+      // (3) 전방 3D 파이프 (크롬 S자 듀얼 벤드 vs 스텔스 매트 블랙 J자 싱글 벤드)
       // -------------------------------------------------------------
-      const pipePoints = [
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0, -0.6, 20),
-        new THREE.Vector3(9.5, -1.8, 62),
-        new THREE.Vector3(7.5, -3.2, 122),
-        new THREE.Vector3(-7.5, -4.6, 178),
-        new THREE.Vector3(-4.5, -5.5, 198)
-      ];
+      let pipePoints;
+      if (currentTonearmStyle === 'stealth_black') {
+        // 실물 사진(Technics SL-1500C 사양) 정밀 1:1 반영:
+        // 피봇(0,0,0)에서 암레스트 클립(Z~65)까지는 우측 돌출 없는 슬릭한 직진 라인(Straight)
+        // 암레스트 통과 후 음반 플래터 방향으로 완만하고 우아하게 꺾이는 모던 싱글 J-Curve
+        pipePoints = [
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, -0.6, 25),
+          new THREE.Vector3(0, -1.8, 65),      // 우측 굴곡 없이 암레스트까지 곧은 스트레이트 라인
+          new THREE.Vector3(-2.8, -3.2, 115),  // 암레스트 통과 후 플래터 쪽으로 부드러운 단일 선회 시작
+          new THREE.Vector3(-7.2, -4.5, 168),  // 우아한 J-Curve 곡선
+          new THREE.Vector3(-4.5, -5.5, 198)   // H-4 칼라 연결부 (기존 헤드셀 및 소리골 트래킹 100% 호환)
+        ];
+      } else {
+        // 클래식 테크닉스 SL-1200 크롬 더블 커브 S자 파이프
+        pipePoints = [
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, -0.6, 20),
+          new THREE.Vector3(9.5, -1.8, 62),   // 우측 볼록 S-Curve
+          new THREE.Vector3(7.5, -3.2, 122),
+          new THREE.Vector3(-7.5, -4.6, 178), // 좌측 굴곡
+          new THREE.Vector3(-4.5, -5.5, 198)
+        ];
+      }
       const pipeCurve = new THREE.CatmullRomCurve3(pipePoints, false, 'catmullrom', 0.5);
       const pipeGeo = new THREE.TubeGeometry(pipeCurve, 64, 2.25, 20, false);
       const pipeMesh = new THREE.Mesh(pipeGeo, pipeMat);
