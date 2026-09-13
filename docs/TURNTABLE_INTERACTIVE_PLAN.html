@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D 턴테이블 인터랙티브 시스템 설계 및 기획서</title>
+  <style>
+    @font-face { font-family:'Pretendard'; font-style:normal; font-weight:400; font-display:swap; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/packages/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2'); }
+    @font-face { font-family:'Pretendard'; font-style:normal; font-weight:600; font-display:swap; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2'); }
+    @font-face { font-family:'Pretendard'; font-style:normal; font-weight:700; font-display:swap; src:url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2'); }
+    
+    :root { 
+      color-scheme: dark; 
+      --bg:#07090e; 
+      --panel:#111520; 
+      --line:#263045; 
+      --text:#f1f5f9; 
+      --muted:#94a3b8; 
+      --primary:#2dd4bf; 
+      --accent:#38bdf8; 
+      --purple:#c084fc; 
+      --gold:#f5c451; 
+    }
+    * { box-sizing: border-box; }
+    body { 
+      margin:0; 
+      background: radial-gradient(circle at 85% 0, #132435 0, transparent 40%), radial-gradient(circle at 15% 30%, #201335 0, transparent 35%), var(--bg); 
+      color:var(--text); 
+      font-family:'Pretendard', system-ui, -apple-system, sans-serif; 
+      line-height:1.7; 
+    }
+    main { width:min(1060px, calc(100% - 32px)); margin:40px auto 90px; }
+    header { 
+      padding:38px; 
+      border:1px solid var(--line); 
+      border-radius:24px; 
+      background: linear-gradient(135deg, rgba(45, 212, 191, .14), rgba(192, 132, 252, .1)); 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    h1 { margin:0 0 12px; font-size:clamp(26px, 4.5vw, 42px); line-height:1.2; font-weight:800; }
+    h2 { margin-top:44px; padding-bottom:10px; border-bottom:1px solid var(--line); color:var(--primary); font-size:22px; }
+    h3 { color:var(--accent); margin-top:26px; font-size:17px; }
+    p, li { color:var(--muted); font-size:15px; }
+    strong { color:var(--text); }
+    code { color:var(--primary); background:#06080d; padding:.2em .45em; border-radius:6px; font-family:monospace; border:1px solid rgba(255,255,255,0.08); font-size:13px; }
+    .meta { display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); margin-bottom:18px; }
+    .pill { padding:4px 12px; border:1px solid var(--line); border-radius:999px; background:rgba(0,0,0,.35); font-size:12px; font-weight:600; }
+    .pill-cyan { border-color:rgba(45,212,191,0.4); color:var(--primary); background:rgba(45,212,191,0.1); }
+    .principle { margin-top:20px; padding:20px 24px; border-left:4px solid var(--primary); background:rgba(45,212,191,.08); border-radius:12px; font-size:14px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; margin-top:20px; }
+    .card { padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--panel); box-shadow:0 10px 25px rgba(0,0,0,0.3); }
+    .card h3 { margin-top:0; }
+    table { width:100%; border-collapse:collapse; display:block; overflow-x:auto; background:var(--panel); border-radius:16px; margin-top:20px; border:1px solid var(--line); }
+    th, td { padding:14px 18px; border:1px solid var(--line); text-align:left; font-size:14px; }
+    th { color:var(--primary); background:#171d2b; font-weight:700; }
+    .btn-mockup { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:12px; background:linear-gradient(135deg, #2dd4bf, #10b981); color:#022c22; font-weight:700; text-decoration:none; font-size:14px; margin-top:14px; box-shadow:0 4px 20px rgba(45,212,191,0.4); }
+    .btn-mockup:hover { filter:brightness(1.1); }
+    footer { margin-top:60px; padding-top:24px; border-top:1px solid var(--line); color:#64748b; font-size:13px; text-align:center; }
+    @media (max-width:600px) { main{margin-top:16px} header{padding:24px} }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="meta">
+      <span class="pill pill-cyan">인터랙티브 기획서</span>
+      <span class="pill">C:\Works\Turn Table</span>
+      <span class="pill">2026-09-13</span>
+      <span class="pill">v1.0.0</span>
+    </div>
+    <h1>3D 턴테이블 인터랙티브 시스템 기획서</h1>
+    <p>사선 원근 투시(Perspective Tilt)와 마이크로 매크로 클로즈업 구도를 결합하여, 두께감 있는 알루미늄 플래터와 LP판 소리골, 정교한 S자 크롬 톤암과 바늘 인터랙션을 웹 기술로 구현한 시스템 명세서입니다.</p>
+    
+    <div>
+      <a href="../index.html" class="btn-mockup">
+        <span>🎛️ 3D 턴테이블 메인 앱 실행 (index.html)</span>
+      </a>
+    </div>
+
+    <div class="principle">
+      <strong>핵심 디자인 원칙</strong><br>
+      턴테이블 전체가 아닌, <strong>레코드판 플래터의 두께와 톤암 바늘의 접촉부만 클로즈업</strong>하여 사선 각도로 묵직하게 회전하도록 연출하고, 재생/일시정지에 따라 톤암이 LP 위로 내려앉거나 들려 올라가는 실감나는 인터랙션을 제공합니다.
+    </div>
+  </header>
+
+  <h2>1. 3D 그래픽 및 레이어 구성</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>📐 사선 원근 투시 (Perspective)</h3>
+      <p><code>perspective: 1100px</code>와 <code>rotateX(54deg) rotateZ(-22deg)</code>를 적용하여 깊이감 있는 3D 로우 앵글을 연출합니다.</p>
+    </div>
+    <div class="card">
+      <h3>⚙️ 2단 플래터 림 두께감</h3>
+      <p><code>translateZ(-28px)</code> 및 <code>translateZ(-16px)</code> 원통 레이어로 실제 두꺼운 알루미늄 턴테이블 플래터를 완벽 재현합니다.</p>
+    </div>
+    <div class="card">
+      <h3>✨ 소리골 & 비등방성 광택</h3>
+      <p>1px 단위의 정밀한 동심원 그루브와 조명에 따라 일렁이는 나비넥타이 형태의 빛 반사(Anisotropic Sheen)를 순수 CSS로 구현했습니다.</p>
+    </div>
+    <div class="card">
+      <h3>🎶 S자형 크롬 톤암 & 바늘</h3>
+      <p>정밀 SVG로 제작된 톤암이 음악 재생 시 LP 위로 부드럽게 내려앉고, 일시정지 시 살짝 들려 올라가는 모션을 지원합니다.</p>
+    </div>
+  </div>
+
+  <h2>2. 인터랙션 및 조작 기능 매트릭스</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>기능</th>
+        <th>조작 방법</th>
+        <th>효과 및 기술 사양</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>재생 / 일시정지</strong></td>
+        <td>하단 메인 원형 토글 버튼</td>
+        <td>톤암 하강/착지 (rotate 0deg), LP 회전 시작 / 톤암 리프트업 (rotate -18deg), LP 감속 멈춤</td>
+      </tr>
+      <tr>
+        <td><strong>화면 드래그 앵글 제어</strong></td>
+        <td>화면 마우스/터치 자유 드래그</td>
+        <td>실시간 X축 틸트 및 Z축 각도 조절로 사용자가 원하는 최적의 사선 뷰 탐색</td>
+      </tr>
+      <tr>
+        <td><strong>카메라 틸트 슬라이더</strong></td>
+        <td>하단 우측 슬라이더 바</td>
+        <td>30° ~ 75° 로우 앵글 정밀 제어</td>
+      </tr>
+      <tr>
+        <td><strong>회전 속도 전환</strong></td>
+        <td>33 RPM / 45 RPM 버튼</td>
+        <td>LP 회전 주기 전환 (3.2초 ↔ 2.2초)</td>
+      </tr>
+      <tr>
+        <td><strong>레퍼런스 사진 비교</strong></td>
+        <td>상단 📷 버튼</td>
+        <td>사용자 제공 원본 사진(assets/reference_turntable.jpg) 모달 팝업 비교</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3. 새 작업 디렉토리 구성 안내</h2>
+  <div class="card">
+    <p><code>C:\Works\Turn Table\</code> 폴더에 모든 소스와 리소스가 독립적으로 배치되었습니다:</p>
+    <ul>
+      <li><code>index.html</code> : 바로 실행할 수 있는 메인 인터랙티브 앱</li>
+      <li><code>turntable_mockup.html</code> : 단독 목업 페이지</li>
+      <li><code>turntable_widget.html</code> : 컴팩트 위젯 버전</li>
+      <li><code>assets/reference_turntable.jpg</code> : 원본 레퍼런스 이미지</li>
+      <li><code>docs/</code> : 본 기획서 및 워크스루 문서</li>
+      <li><code>src/ImmersiveTurntableModal.jsx</code> : 향후 리액트 프로젝트 재연동용 컴포넌트 소스</li>
+    </ul>
+  </div>
+
+  <footer>
+    3D Turntable Interactive Studio · 2026 ZEONS Inc. All rights reserved.
+  </footer>
+</main>
+</body>
+</html>

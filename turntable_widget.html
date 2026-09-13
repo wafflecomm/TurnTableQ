@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .turntable-box {
+      perspective: 900px;
+      perspective-origin: 55% 45%;
+    }
+
+    .turntable-mesh {
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease-out;
+    }
+
+    /* 플래터 측면 림 두께감 (알루미늄 3D 원통 레이어) */
+    .platter-rim-base {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #334155 0%, #0f172a 60%, #020617 100%);
+      transform: translateZ(-20px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.95);
+    }
+
+    .platter-rim-top {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #64748b 0%, #1e293b 30%, #475569 60%, #0f172a 100%);
+      transform: translateZ(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.85);
+    }
+
+    /* LP 디스크 회전 */
+    .vinyl-core {
+      border-radius: 50%;
+      background: radial-gradient(circle at center, 
+        #111115 0%, 
+        #18181d 18%, 
+        #0c0c0e 22%, 
+        #1c1d22 35%, 
+        #090a0d 48%, 
+        #1a1b20 65%, 
+        #070709 82%, 
+        #15161a 98%, 
+        #2a2c33 100%
+      );
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* 소리골 */
+    .vinyl-grooves {
+      background: repeating-radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.04) 0px,
+        rgba(255, 255, 255, 0.04) 1px,
+        transparent 2px,
+        transparent 3px
+      );
+      mix-blend-mode: screen;
+    }
+
+    /* 비등방성 광택 (Sheen) */
+    .vinyl-sheen {
+      background: conic-gradient(
+        from 35deg at 50% 50%,
+        rgba(255, 255, 255, 0.2) 0deg,
+        transparent 35deg,
+        rgba(255, 255, 255, 0.04) 90deg,
+        transparent 145deg,
+        rgba(255, 255, 255, 0.22) 180deg,
+        transparent 215deg,
+        rgba(255, 255, 255, 0.04) 270deg,
+        transparent 325deg,
+        rgba(255, 255, 255, 0.2) 360deg
+      );
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    @keyframes spinDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .is-spinning {
+      animation: spinDisc 3.2s linear infinite;
+    }
+
+    .is-paused {
+      animation-play-state: paused;
+    }
+
+    .tonearm-yaw-box {
+      transform-origin: 235px 30px;
+      transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-style: preserve-3d;
+    }
+    .tonearm-lift-box {
+      transform-origin: 235px 30px;
+      transition: transform 0.75s cubic-bezier(0.33, 1, 0.68, 1);
+      transform-style: preserve-3d;
+    }
+    .widget-reflection {
+      transition: opacity 0.5s ease;
+      mix-blend-mode: screen;
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-2">
+  <div class="bg-[#0b0e14] text-white border border-white/10 rounded-2xl p-4 shadow-2xl overflow-hidden relative max-w-xl mx-auto">
+    
+    <!-- 1. 헤더 & 컨트롤 -->
+    <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-2">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-teal-300 font-bold text-xs">
+          Q
+        </div>
+        <div>
+          <h3 class="text-xs font-bold text-white tracking-wide">3D 턴테이블 사선 클로즈업 플레이어</h3>
+          <p class="text-[10px] text-zinc-400">Midnight City Vibe · Moodify Lo-Fi</p>
+        </div>
+      </div>
+
+      <!-- 상태 뱃지 & 재생 버튼 -->
+      <div class="flex items-center gap-2">
+        <span id="arm-badge" class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+          ● 회전 중 (Playing)
+        </span>
+        <button id="btn-play" class="w-8 h-8 rounded-full bg-teal-400 text-slate-950 flex items-center justify-center font-bold text-xs hover:scale-105 active:scale-95 transition-all shadow-[0_0_12px_rgba(45,212,191,0.6)]">
+          ⏸
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. 턴테이블 3D 뷰포트 (높이 약 280px로 컴팩트하게 구성) -->
+    <div class="turntable-box relative w-full h-[280px] overflow-hidden rounded-xl bg-gradient-to-b from-[#11141c] to-[#08090d] flex items-center justify-center cursor-grab active:cursor-grabbing">
+      
+      <!-- 앰비언트 백라이트 -->
+      <div class="absolute inset-0 bg-radial from-teal-500/15 via-transparent to-transparent pointer-events-none"></div>
+
+      <!-- 3D 턴테이블 메시 (사선 각도: X 54도, Z -22도) -->
+      <div id="turntable-mesh" class="turntable-mesh relative w-[460px] h-[460px] -translate-x-[45px] translate-y-[35px]"
+           style="transform: rotateX(54deg) rotateY(6deg) rotateZ(-22deg) scale(1.08);">
+        
+        <!-- 하부 섀도우 -->
+        <div class="absolute inset-[-20px] rounded-[36px] bg-[#05070a] shadow-[0_30px_70px_rgba(0,0,0,0.95)] pointer-events-none"
+             style="transform: translateZ(-35px);"></div>
+
+        <!-- 알루미늄 플래터 베이스 & 림 -->
+        <div class="absolute inset-0 rounded-full bg-[#161a22] shadow-2xl" style="transform-style: preserve-3d;">
+          <div class="platter-rim-base"></div>
+          <div class="platter-rim-top"></div>
+          <div class="absolute inset-[-2px] rounded-full border-[4px] border-[#94a3b8]/40"></div>
+
+          <!-- 회전하는 LP판 -->
+          <div id="vinyl-disc" class="vinyl-core is-spinning absolute inset-[6px] shadow-2xl">
+            <div class="absolute inset-0 rounded-full vinyl-grooves"></div>
+            <div class="absolute inset-0 rounded-full vinyl-sheen"></div>
+            
+            <!-- 중앙 핑크 레트로 라벨 (사용자 사진 속 라벨 스타일) -->
+            <div class="absolute inset-[32%] rounded-full bg-gradient-to-tr from-rose-600 via-rose-400 to-amber-200 border-2 border-slate-900 shadow-inner flex flex-col items-center justify-center p-2 text-center text-rose-950">
+              <span class="text-[6px] font-black tracking-widest uppercase opacity-75">STEREO 33</span>
+              <span class="text-[9px] font-bold leading-none mt-0.5 line-clamp-1">Midnight City</span>
+              <span class="text-[6px] font-medium tracking-wider uppercase opacity-80 mt-0.5">Moodify</span>
+              <!-- 센터 핀홀 -->
+              <div class="w-3.5 h-3.5 rounded-full bg-[#090b10] border border-zinc-400 shadow-inner flex items-center justify-center mt-1">
+                <div class="w-1.5 h-1.5 rounded-full bg-zinc-200"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 센터 크롬 핀 -->
+          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-zinc-200 border border-white/60 shadow-md pointer-events-none"
+               style="transform: translateZ(6px);"></div>
+        </div>
+
+        <!-- 3. 정교한 3D 톤암 시스템 (피봇 타워, 2축 승강/선회, 핑거 리프트, 거울 반사) -->
+        <div id="tonearm-container" class="absolute top-[-30px] right-[-35px] w-[280px] h-[330px] pointer-events-none z-20" style="transform-style: preserve-3d;">
+          <!-- 3D 피봇 베이스 타워 -->
+          <div class="absolute rounded-full bg-gradient-to-br from-[#1e293b] via-[#0f172a] to-[#020617] border border-[#475569]/50 shadow-lg"
+               style="left: 205px; top: 10px; width: 60px; height: 60px; transform: translateZ(4px);"></div>
+          <div class="absolute rounded-full bg-zinc-800 border border-white/20 shadow flex items-center justify-center"
+               style="left: 215px; top: 20px; width: 40px; height: 40px; transform: translateZ(12px);">
+            <div id="widget-cue-lever" class="w-2 h-4 bg-zinc-300 rounded-sm shadow transition-transform" style="transform: rotate(8deg);"></div>
+          </div>
+
+          <!-- 수평 선회(Yaw) 축 -->
+          <div id="widget-arm-yaw" class="tonearm-yaw-box absolute inset-0" style="transform: rotate(-16deg);">
+            <!-- 카운터웨이트 (무게추) -->
+            <div class="absolute" style="left: 222px; top: -5px; transform: translateZ(20px);">
+              <div class="w-6 h-6 rounded-full bg-gradient-to-r from-zinc-400 via-zinc-200 to-zinc-500 border border-white/40 shadow-md"></div>
+            </div>
+
+            <!-- 유압 승강(Lift) 축 -->
+            <div id="widget-arm-lift" class="tonearm-lift-box absolute inset-0" style="transform: translateZ(3px) rotateX(0deg);">
+              <svg viewBox="0 0 280 330" class="w-full h-full filter drop-shadow-[12px_20px_22px_rgba(0,0,0,0.95)]">
+                <defs>
+                  <linearGradient id="widget-pipe-chrome" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="25%" stop-color="#e2e8f0"/>
+                    <stop offset="50%" stop-color="#64748b"/>
+                    <stop offset="75%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#cbd5e1"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- 짐벌 베어링 링 -->
+                <circle cx="235" cy="30" r="16" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+                <circle cx="235" cy="30" r="10" fill="#1e293b" stroke="#64748b"/>
+                <circle cx="235" cy="30" r="5" fill="url(#widget-pipe-chrome)"/>
+
+                <!-- S자 크롬 파이프 -->
+                <path d="M 235 30 C 215 65, 205 110, 190 160 C 178 190, 160 220, 125 240 L 95 255" 
+                      fill="none" stroke="url(#widget-pipe-chrome)" stroke-width="7" stroke-linecap="round"/>
+                <path d="M 234 31 C 214 66, 204 110, 189 160 C 177 190, 159 220, 124 239 L 94 254" 
+                      fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+
+                <!-- 체결 칼라 -->
+                <rect x="91" y="250" width="8" height="10" rx="1" fill="#1e293b" stroke="#64748b" transform="rotate(25 95 255)"/>
+
+                <!-- 카트리지 헤드셸 & 스타일러스 바늘 & 핑거 리프트 -->
+                <g id="widget-headshell" transform="translate(48, 252) rotate(26)">
+                  <!-- 다이내믹 반사광 -->
+                  <g id="widget-stylus-reflection" class="widget-reflection" transform="translate(0, 32) scale(1, -0.6)" opacity="0.65">
+                    <line x1="2" y1="12" x2="2" y2="20" stroke="#38bdf8" stroke-width="1.8"/>
+                    <circle cx="2" cy="20" r="1.5" fill="#67e8f9"/>
+                  </g>
+
+                  <!-- 헤드셸 본체 -->
+                  <rect x="0" y="0" width="48" height="20" rx="3" fill="#0f172a" stroke="#475569" stroke-width="1.2"/>
+                  <circle cx="30" cy="10" r="3" fill="#94a3b8"/>
+                  <circle cx="30" cy="10" r="1" fill="#020617"/>
+
+                  <!-- ★ 유선형 핑거 리프트 (Finger Lift) -->
+                  <path d="M 34 3 C 41 -7, 50 -5, 52 -1" fill="none" stroke="url(#widget-pipe-chrome)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M 34 2 C 41 -8, 50 -6, 52 -2" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
+
+                  <!-- 카트리지 & 스타일러스 바늘 -->
+                  <polygon points="1,14 7,14 5,22 3,22" fill="#020617"/>
+                  <polygon points="1,17 2.5,24 4,17" fill="#f8fafc"/>
+                  <circle cx="2.5" cy="24" r="1.2" fill="#38bdf8"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 인터랙션 안내 오버레이 -->
+      <div class="absolute bottom-2 left-3 text-[10px] text-zinc-400 bg-black/50 px-2 py-0.5 rounded backdrop-blur pointer-events-none">
+        마우스로 화면을 드래그하여 각도를 조절해보세요 ↻
+      </div>
+    </div>
+
+    <!-- 3. 하단 실시간 앵글 조절 바 -->
+    <div class="flex items-center justify-between pt-3 text-xs text-zinc-300">
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] text-zinc-400">카메라 틸트:</span>
+        <input id="slider-tilt" type="range" min="35" max="70" value="54" class="w-24 h-1 bg-white/20 rounded cursor-pointer accent-teal-400">
+        <span id="txt-tilt" class="text-[10px] font-mono text-teal-300">54°</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-speed" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-mono text-teal-300">
+          33 RPM
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let isPlaying = true;
+    let tilt = 54;
+    let rotZ = -22;
+    let speed = 3.2;
+
+    const vinyl = document.getElementById('vinyl-disc');
+    const armYaw = document.getElementById('widget-arm-yaw');
+    const armLift = document.getElementById('widget-arm-lift');
+    const cueLever = document.getElementById('widget-cue-lever');
+    const stylusReflect = document.getElementById('widget-stylus-reflection');
+    const btnPlay = document.getElementById('btn-play');
+    const badge = document.getElementById('arm-badge');
+    const mesh = document.getElementById('turntable-mesh');
+    const slider = document.getElementById('slider-tilt');
+    const txtTilt = document.getElementById('txt-tilt');
+    const btnSpeed = document.getElementById('btn-speed');
+
+    function togglePlayback() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        btnPlay.textContent = '⏸';
+        badge.textContent = '● 회전 중 (Playing)';
+        badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        
+        // 1단계: 수평 스윙
+        armLift.style.transform = 'translateZ(18px) rotateX(-5deg)';
+        cueLever.style.transform = 'rotate(-15deg)';
+        stylusReflect.style.opacity = '0.1';
+        armYaw.style.transform = 'rotate(-16deg)';
+
+        // 2단계: 유압 천천히 착지
+        setTimeout(() => {
+          if (!isPlaying) return;
+          armLift.style.transform = 'translateZ(3px) rotateX(0deg)';
+          cueLever.style.transform = 'rotate(8deg)';
+          setTimeout(() => {
+            if (!isPlaying) return;
+            vinyl.classList.remove('is-paused');
+            vinyl.classList.add('is-spinning');
+            stylusReflect.style.opacity = '0.7';
+          }, 500);
+        }, 450);
+      } else {
+        btnPlay.textContent = '▶';
+        badge.textContent = '○ 정지 (Paused)';
+        badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        
+        // 1단계: 수직 리프트
+        armLift.style.transform = 'translateZ(18px) rotateX(-5deg)';
+        cueLever.style.transform = 'rotate(-15deg)';
+        stylusReflect.style.opacity = '0.05';
+        vinyl.classList.add('is-paused');
+
+        // 2단계: 거치대로 복귀
+        setTimeout(() => {
+          if (isPlaying) return;
+          armYaw.style.transform = 'rotate(15deg)';
+          setTimeout(() => {
+            if (isPlaying) return;
+            armLift.style.transform = 'translateZ(14px) rotateX(-2deg)';
+          }, 450);
+        }, 300);
+      }
+    }
+
+    btnPlay.addEventListener('click', togglePlayback);
+
+    slider.addEventListener('input', (e) => {
+      tilt = e.target.value;
+      txtTilt.textContent = `${tilt}°`;
+      updateTransform();
+    });
+
+    function updateTransform() {
+      mesh.style.transform = `rotateX(${tilt}deg) rotateY(6deg) rotateZ(${rotZ}deg) scale(1.08)`;
+    }
+
+    btnSpeed.addEventListener('click', () => {
+      if (speed === 3.2) {
+        speed = 2.2;
+        btnSpeed.textContent = '45 RPM';
+        btnSpeed.classList.replace('text-teal-300', 'text-amber-300');
+      } else {
+        speed = 3.2;
+        btnSpeed.textContent = '33 RPM';
+        btnSpeed.classList.replace('text-amber-300', 'text-teal-300');
+      }
+      vinyl.style.animationDuration = `${speed}s`;
+    });
+
+    // 드래그로 각도 조절
+    let dragging = false;
+    let sX = 0, sY = 0;
+    const box = document.querySelector('.turntable-box');
+
+    box.addEventListener('mousedown', (e) => {
+      dragging = true;
+      sX = e.clientX;
+      sY = e.clientY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const dX = e.clientX - sX;
+      const dY = e.clientY - sY;
+      rotZ = Math.max(-40, Math.min(-5, -22 + dX * 0.08));
+      tilt = Math.max(35, Math.min(70, 54 - dY * 0.08));
+      slider.value = tilt;
+      txtTilt.textContent = `${Math.round(tilt)}°`;
+      updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => { dragging = false; });
+  </script>
+</body>
+</html>
