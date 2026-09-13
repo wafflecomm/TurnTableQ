@@ -392,7 +392,7 @@
               </div>
 
               <!-- 스타일 1: 크롬 S (Chrome S) -->
-              <div data-tonearm-style="chrome_s" class="tonearm-style-item active flex items-center justify-between p-1.5 rounded-lg border border-teal-500/60 bg-teal-500/20 text-white cursor-pointer transition-all shadow-[0_0_8px_rgba(45,212,191,0.2)] group">
+              <div data-tonearm-style="chrome_s" class="tonearm-style-item flex items-center justify-between p-1.5 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all text-zinc-300 group">
                 <div class="flex items-center gap-2">
                   <div class="w-6 h-6 rounded-md border border-white/25 bg-gradient-to-br from-slate-200 via-slate-400 to-slate-100 flex items-center justify-center text-xs shadow-inner shrink-0 text-slate-800">
                     ✨
@@ -400,33 +400,35 @@
                   <div>
                     <div class="font-bold text-[11px] leading-tight text-white flex items-center gap-1">
                       <span>크롬 S (Chrome S)</span>
-                      <span class="text-[8px] px-1 py-0.2 rounded bg-slate-200 text-slate-900 font-semibold">오리지널</span>
+                      <span class="text-[8px] px-1 py-0.2 rounded bg-slate-200 text-slate-900 font-semibold">클래식</span>
                     </div>
                     <div class="text-[9px] text-zinc-400 leading-tight">미러 크롬 파이프 & 아치 짐벌</div>
                   </div>
                 </div>
-                <span class="tonearm-check-icon w-3.5 h-3.5 text-teal-300 flex items-center">
-                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                </span>
               </div>
 
-              <!-- 스타일 2: 스텔스 매트 블랙 J (Technics SL-1500C / MK7) -->
-              <div data-tonearm-style="stealth_black" class="tonearm-style-item flex items-center justify-between p-1.5 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all text-zinc-300 group">
+              <!-- 스타일 2: 스텔스 매트 블랙 S (Technics 실물 사진 1:1) -->
+              <div data-tonearm-style="stealth_black" class="tonearm-style-item active flex items-center justify-between p-1.5 rounded-lg border border-teal-500/60 bg-teal-500/20 text-white cursor-pointer transition-all shadow-[0_0_8px_rgba(45,212,191,0.2)] group">
                 <div class="flex items-center gap-2">
                   <div class="relative w-6 h-6 rounded-md overflow-hidden border border-zinc-700 bg-zinc-950 shrink-0">
                     <img src="./stealth_black_tonearm.jpg" alt="Stealth Black Tonearm" class="w-full h-full object-cover">
                   </div>
                   <div>
-                    <div class="font-bold text-[11px] leading-tight text-zinc-200 flex items-center gap-1">
-                      <span>스텔스 매트 블랙 J</span>
-                      <span class="text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-semibold">실물 J-Shape</span>
+                    <div class="font-bold text-[11px] leading-tight text-zinc-100 flex items-center gap-1">
+                      <span>스텔스 매트 블랙 S</span>
+                      <span class="text-[8px] px-1 py-0.2 rounded bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-semibold">실물 S-Curve</span>
                     </div>
-                    <div class="text-[9px] text-zinc-400 leading-tight">사틴 제트블랙 J자 파이프 & 큐브 요크</div>
+                    <div class="text-[9px] text-zinc-400 leading-tight">우측 휨 ➔ 하강 ➔ 좌측 휨 딥 블랙 파이프</div>
                   </div>
                 </div>
-                <button class="btn-tonearm-photo-modal p-0.5 rounded bg-white/10 hover:bg-indigo-500 hover:text-black text-indigo-300 transition-colors" title="실물 사진 크게 보기" onclick="event.stopPropagation()">
-                  <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
-                </button>
+                <div class="flex items-center gap-1">
+                  <button class="btn-tonearm-photo-modal p-0.5 rounded bg-white/10 hover:bg-indigo-500 hover:text-black text-indigo-300 transition-colors" title="실물 사진 크게 보기" onclick="event.stopPropagation()">
+                    <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <span class="tonearm-check-icon w-3.5 h-3.5 text-teal-300 flex items-center">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -678,7 +680,7 @@
               <span>사용자 제공 실물 사진 1:1 3D 정밀 구현 완료</span>
             </p>
             <p class="text-[11px] text-zinc-400 leading-relaxed">
-              • <strong>J자 톤암 파이프 (J-Shape)</strong>: 실물 사진 속 SL-1500C 특유의 모던 싱글 벤드 파이프 (피봇-암레스트 직선 구간 + 유려한 단일 곡선, 반사율 0.72 PBR 정밀 튜닝)<br>
+              • <strong>실물 S-Curve 톤암 파이프</strong>: 무게추가 위에 있는 기준 우측으로 휜 다음 시원하게 내려와서 좌측으로 휘는 실물 곡선 지오메트리 & 사틴 제트블랙 PBR 머티리얼 1:1 완벽 구현<br>
               • <strong>헤드셀 칼라 링</strong>: 매트블랙 원통에 정밀 가공된 실버 크롬 널링 스트라이프 투톤 링 재현<br>
               • <strong>모던 큐브 짐벌 요크</strong>: 각진 솔리드 큐브 블록 요크와 실버 피봇 볼트 디테일 탑재
             </p>
@@ -687,7 +689,7 @@
           <div class="flex items-center gap-2 pt-1">
             <button id="btn-modal-mount-tonearm" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-500 to-teal-400 text-slate-950 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:brightness-110 active:scale-95 transition-all">
               <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-              <span>이 스텔스 매트 블랙 J-톤암을 3D에 장착하기</span>
+              <span>이 스텔스 매트 블랙 톤암을 3D에 장착하기</span>
             </button>
             <button id="btn-modal-close-tonearm-bottom" class="px-4 py-2.5 rounded-xl text-xs font-medium bg-white/10 hover:bg-white/15 text-white transition-all">
               닫기
@@ -1128,13 +1130,13 @@
     let tonearmCurrentTilt = 0;
     let isCueingUp = false;
     let tonearmPosState = 'rest'; // 'rest' | 'playing' | 'run_out'
-    // 톤암 어셈블리 2종 스타일 데이터베이스 (크롬 S & 스텔스 매트 블랙 J)
-    let currentTonearmStyle = 'chrome_s'; // 'chrome_s' | 'stealth_black'
+    // 톤암 어셈블리 2종 스타일 데이터베이스 (크롬 S & 스텔스 매트 블랙 S)
+    let currentTonearmStyle = 'stealth_black'; // 실물 사진 스타일 기본 적용
     const TONEARM_STYLES = {
       'chrome_s': {
         name: '크롬 S (Chrome S)',
-        desc: '테크닉스 오리지널 더블 커브 미러 크롬 S자 파이프 & 실버 아치 짐벌 요크',
-        pipeShape: 's_shape',
+        desc: '테크닉스 오리지널 미러 크롬 파이프 & 실버 아치 짐벌 요크',
+        pipeShape: 'classic_s',
         pipeColor: 0xf8fafc,
         pipeMetalness: 0.98,
         pipeRoughness: 0.05,
@@ -1150,22 +1152,22 @@
         dialColor: 0xcfd6e2
       },
       'stealth_black': {
-        name: '스텔스 매트 블랙 J (Stealth Matte Black J)',
-        desc: 'SL-1500C / MK7 블랙 에디션 사틴 제트블랙 J자 싱글 벤드 파이프 & 투톤 크롬 링 & 큐브 요크',
-        pipeShape: 'j_shape',
-        pipeColor: 0x181a20,
-        pipeMetalness: 0.72,
-        pipeRoughness: 0.38,
-        yokeColor: 0x14161d,
-        yokeMetalness: 0.60,
-        yokeRoughness: 0.42,
+        name: '스텔스 매트 블랙 S (Stealth Matte Black S)',
+        desc: '실물 사진 사양: 무게추 기준 우측 휨 -> 하강 -> 좌측 휨 딥 블랙 S-Curve & 큐브 요크',
+        pipeShape: 'stealth_s',
+        pipeColor: 0x101217,
+        pipeMetalness: 0.78,
+        pipeRoughness: 0.30,
+        yokeColor: 0x0f1116,
+        yokeMetalness: 0.65,
+        yokeRoughness: 0.38,
         yokeType: 'cube',
-        collarColor: 0x161820,
+        collarColor: 0x14161d,
         collarRingColor: 0xf8fafc, // 투톤 크롬 널링 스트라이프
-        barrelColor: 0x15171e,
-        barrelMetalness: 0.75,
-        barrelRoughness: 0.38,
-        dialColor: 0x181a22
+        barrelColor: 0x111318,
+        barrelMetalness: 0.80,
+        barrelRoughness: 0.35,
+        dialColor: 0x15171f
       }
     };
 
@@ -2304,34 +2306,36 @@
       counterweightBarrelMesh.add(barrelChamfer);
 
       // -------------------------------------------------------------
-      // (3) 전방 3D 파이프 (크롬 S자 듀얼 벤드 vs 스텔스 매트 블랙 J자 싱글 벤드)
+      // (3) 전방 3D 파이프 (오리지널 크롬 S자 vs 실물 사진 사양 딥 블랙 S-Curve)
       // -------------------------------------------------------------
       let pipePoints;
+      let pipeRadius = 2.25;
       if (currentTonearmStyle === 'stealth_black') {
-        // 실물 사진(Technics SL-1500C 사양) 정밀 1:1 반영:
-        // 피봇(0,0,0)에서 암레스트 클립(Z~65)까지는 우측 돌출 없는 슬릭한 직진 라인(Straight)
-        // 암레스트 통과 후 음반 플래터 방향으로 완만하고 우아하게 꺾이는 모던 싱글 J-Curve
+        // 실물 사진 1:1 정밀 반영 (무게추 상단 기준: 우측 휨 -> 중앙 하강 -> 좌측 휨 딥 블랙 S-Curve)
         pipePoints = [
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0, -0.6, 25),
-          new THREE.Vector3(0, -1.8, 65),      // 우측 굴곡 없이 암레스트까지 곧은 스트레이트 라인
-          new THREE.Vector3(-2.8, -3.2, 115),  // 암레스트 통과 후 플래터 쪽으로 부드러운 단일 선회 시작
-          new THREE.Vector3(-7.2, -4.5, 168),  // 우아한 J-Curve 곡선
-          new THREE.Vector3(-4.5, -5.5, 198)   // H-4 칼라 연결부 (기존 헤드셀 및 소리골 트래킹 100% 호환)
+          new THREE.Vector3(0, 0, 0),          // 피봇 짐벌 코어 (0,0,0)
+          new THREE.Vector3(3.5, -0.6, 25),    // 피봇에서 나와 우측으로 유연하게 선회
+          new THREE.Vector3(13.0, -1.8, 65),   // [1단계: 우측 휨] 과감하고 풍만한 우측 볼록 아크
+          new THREE.Vector3(8.5, -3.2, 115),   // [2단계: 하강 구간] 중앙을 향해 시원하게 뻗어 내려옴
+          new THREE.Vector3(-1.0, -4.0, 150),  // 중앙선 관통하며 좌측 만곡 진입
+          new THREE.Vector3(-8.8, -4.8, 178),  // [3단계: 좌측 휨] 플래터/헤드셀을 향해 뚜렷하게 좌측으로 휨
+          new THREE.Vector3(-4.5, -5.5, 198)   // H-4 칼라 결합부 (다이아몬드 바늘 착지면 & 트래킹 100% 호환)
         ];
+        pipeRadius = 2.38; // 묵직하고 단단한 사틴 블랙 아노다이징 파이프 볼륨감
       } else {
-        // 클래식 테크닉스 SL-1200 크롬 더블 커브 S자 파이프
+        // 오리지널 테크닉스 크롬 S자 파이프
         pipePoints = [
           new THREE.Vector3(0, 0, 0),
           new THREE.Vector3(0, -0.6, 20),
-          new THREE.Vector3(9.5, -1.8, 62),   // 우측 볼록 S-Curve
+          new THREE.Vector3(9.5, -1.8, 62),
           new THREE.Vector3(7.5, -3.2, 122),
-          new THREE.Vector3(-7.5, -4.6, 178), // 좌측 굴곡
+          new THREE.Vector3(-7.5, -4.6, 178),
           new THREE.Vector3(-4.5, -5.5, 198)
         ];
+        pipeRadius = 2.25;
       }
       const pipeCurve = new THREE.CatmullRomCurve3(pipePoints, false, 'catmullrom', 0.5);
-      const pipeGeo = new THREE.TubeGeometry(pipeCurve, 64, 2.25, 20, false);
+      const pipeGeo = new THREE.TubeGeometry(pipeCurve, 64, pipeRadius, 20, false);
       const pipeMesh = new THREE.Mesh(pipeGeo, pipeMat);
       pipeMesh.castShadow = true;
       tonearmCueGroup.add(pipeMesh);
