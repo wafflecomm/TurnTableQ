@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>3D Turntable Studio - Phase 5: Chrome S-Tonearm & Headshell</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -2306,24 +2309,24 @@
       counterweightBarrelMesh.add(barrelChamfer);
 
       // -------------------------------------------------------------
-      // (3) 전방 3D 파이프 (실물 다이어그램 기반 정밀 2-Bend 톤암 지오메트리)
+      // (3) 전방 3D 파이프 (실물 다이어그램 1:1 정밀 2-Bend S자 톤암 지오메트리)
       // -------------------------------------------------------------
-      // 다이어그램 1:1 반영:
-      // 1. 피봇(0,0,0)에서 출구 직진 (Z: 0 -> 16mm)
-      // 2. 우측 벤드 (1차 벤드): 암레스트 부근까지 우측으로 유연하게 꺾임 (Z: 16 -> 75mm, X: 0 -> +14.8mm)
-      // 3. 중간 긴 직선 하강부: 우측에서 대각선 사선으로 곧게 뻗어 내려옴 (Z: 75 -> 178mm, X: +14.8 -> +0.5mm)
-      // 4. 좌측 벤드 (2차 벤드): 칼라 결합부 직전에서 좌측으로 꺾임 (Z: 178 -> 198mm, X: +0.5 -> -4.8mm)
+      // 실물 다이어그램 1:1 정밀 구현:
+      // 1. 피봇(0,0,0)에서 직진 (Z: 0 -> 18mm)
+      // 2. 1차 벤드 (우측 벤드): 피봇 바로 앞에서 우측으로 과감하게 +15.5mm 꺾임 (Z: 18 -> 75mm)
+      // 3. 중간 긴 직선 하강부: 시원하게 사선으로 뻗어 내려옴 (Z: 75 -> 180mm)
+      // 4. 2차 벤드 (좌측 벤드): 칼라 결합부 직전에서 좌측으로 -23.7° 꺾임 (실물 오프셋 앵글)
+      // 5. 칼라 및 헤드셀 결합: 좌측으로 꺾인 각도 그대로 일체형 결합
       const pipePoints = [
         new THREE.Vector3(0, 0, 0),          // 피봇 짐벌 코어 (0,0,0)
-        new THREE.Vector3(0.8, -0.4, 16),    // 피봇 출구 직진
-        new THREE.Vector3(5.2, -0.9, 34),    // [1단계: 1차 우측 벤드 시작]
-        new THREE.Vector3(11.8, -1.6, 56),   // 우측 선회
-        new THREE.Vector3(14.8, -2.2, 75),   // [1차 벤드 정점 / 우측 볼록 아크 완료]
-        new THREE.Vector3(11.2, -3.2, 115),  // [2단계: 중간 긴 직선 하강 구간]
-        new THREE.Vector3(5.5, -4.2, 155),   // 시원하게 뻗어 내려오는 직선 파이프
-        new THREE.Vector3(0.5, -4.8, 178),   // 중앙선 통과
-        new THREE.Vector3(-3.2, -5.2, 190),  // [3단계: 2차 좌측 벤드] 플래터/헤드셀 방향으로 꺾임
-        new THREE.Vector3(-4.8, -5.5, 198)   // [4단계: H-4 칼라 연결부] (헤드셀 및 소리골 트래킹 100% 호환)
+        new THREE.Vector3(1.5, -0.4, 18),    // 피봇 출구 직진
+        new THREE.Vector3(8.5, -1.2, 45),    // [1단계: 1차 우측 벤드 시작]
+        new THREE.Vector3(15.5, -2.0, 75),   // [1차 벤드 정점: 우측으로 과감하게 +15.5mm 휨]
+        new THREE.Vector3(14.0, -3.0, 115),  // [2단계: 중간 긴 직선 하강 구간]
+        new THREE.Vector3(8.5, -4.0, 155),   // 시원하게 사선으로 뻗어 내려옴
+        new THREE.Vector3(0.5, -4.8, 180),   // 중앙 축선 통과
+        new THREE.Vector3(-5.5, -5.3, 195),  // [3단계: 2차 좌측 벤드: 좌측으로 -23.7° 꺾임]
+        new THREE.Vector3(-8.5, -5.6, 202)   // [4단계: H-4 칼라 연결부] (헤드셀 및 소리골 트래킹 정합)
       ];
 
       const pipeRadius = currentTonearmStyle === 'stealth_black' ? 2.38 : 2.28;
