@@ -892,6 +892,8 @@
       }
       lucide.createIcons();
     }
+
+    let tonearmTargetAngle = TONEARM_REST_ANGLE;
     let tonearmCurrentAngle = TONEARM_REST_ANGLE;
     let tonearmTargetTilt = 0;
     let tonearmCurrentTilt = 0;
@@ -1064,6 +1066,11 @@
 
       // 렌더 루프 시작
       animate();
+
+      // 초기 화면 렌더링 시 뷰포트 크기 & 카메라 종횡비 100% 동기화 보장
+      onWindowResize();
+      setTimeout(onWindowResize, 60);
+      setTimeout(onWindowResize, 250);
     }
 
     // ==========================================
@@ -3211,7 +3218,9 @@
         targetLightPillarMesh.position.y += (targetPillarY - targetLightPillarMesh.position.y) * 0.15;
       }
 
-      // 5단계: 톤암 수평 스윙 보간 (부드러운 이징 이동)
+      // 5단계: 톤암 수평 스윙 보간 (부드러운 이징 이동 및 NaN 방어)
+      if (isNaN(tonearmCurrentAngle)) tonearmCurrentAngle = TONEARM_REST_ANGLE;
+      if (isNaN(tonearmTargetAngle)) tonearmTargetAngle = TONEARM_REST_ANGLE;
       tonearmCurrentAngle += (tonearmTargetAngle - tonearmCurrentAngle) * 0.08;
       if (tonearmArmGroup) {
         tonearmArmGroup.rotation.y = tonearmCurrentAngle;
