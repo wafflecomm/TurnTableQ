@@ -1,5 +1,9 @@
 # 3D Turntable Interactive Studio 🎛️
 
+[![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-2dd4bf?style=for-the-badge&logo=github)](https://wafflecomm.github.io/TurnTableQ/)
+
+> 🌐 **온라인 라이브 데모 바로가기**: **[https://wafflecomm.github.io/TurnTableQ/](https://wafflecomm.github.io/TurnTableQ/)**
+
 사선 원근 투시(Perspective Tilt)와 마이크로 매크로 클로즈업 구도를 결합한 **3D 아날로그 턴테이블 인터랙티브 시스템** 작업 공간입니다.
 
 ---
