@@ -67,7 +67,8 @@
 <body class="w-screen h-screen flex flex-col justify-between overflow-hidden bg-[#07090e]">
 
   <!-- 1. 상단 미니멀 오버레이 헤더 -->
-  <header class="relative z-20 w-full px-6 py-4 flex items-center justify-between backdrop-blur-md bg-black/50 border-b border-white/10">
+  <!-- 1. 상단 미니멀 오버레이 헤더 -->
+  <header class="relative z-20 w-full px-5 py-3 flex items-center justify-between backdrop-blur-md bg-black/60 border-b border-white/10">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-slate-950 font-black shadow-[0_0_15px_rgba(45,212,191,0.5)]">
         TT
@@ -75,14 +76,35 @@
       <div>
         <div class="flex items-center gap-2">
           <span class="text-[10px] tracking-[0.25em] text-teal-400 uppercase font-bold">Pure 3D Turntable Studio</span>
-          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">5단계: 3D S자 톤암 & 트래킹</span>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">6단계: 피치 페이더 & 아날로그 사운드</span>
         </div>
-        <h1 class="text-sm font-semibold tracking-wide text-white/90">Technics SL-1200 S-Shaped Chrome Tonearm & Cartridge Tracking</h1>
+        <h1 class="text-sm font-semibold tracking-wide text-white/90">Technics SL-1200 Direct Drive Studio Player (Pitch & Vinyl Audio Engine)</h1>
       </div>
     </div>
 
-    <!-- 중앙/우측 컨트롤: 재생 토글 및 카메라 프리셋 -->
-    <div class="flex items-center gap-2 sm:gap-3">
+    <!-- 중앙/우측 컨트롤: 재생, 피치, 사운드, 조명 및 카메라 프리셋 -->
+    <div class="flex items-center gap-2 sm:gap-2.5">
+      <!-- 아날로그 오디오 사운드 토글 버튼 (신규) -->
+      <button id="btn-toggle-sound" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-teal-300 border border-teal-500/30 transition-all flex items-center gap-1.5" title="바이닐 오디오 사운드 ON / OFF">
+        <i id="sound-icon" data-lucide="volume-2" class="w-3.5 h-3.5 text-teal-400"></i>
+        <span id="sound-text">사운드 ON</span>
+      </button>
+
+      <!-- 스타일러스 팝업 타깃 핀라이트 버튼 (신규) -->
+      <button id="btn-toggle-target-light" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1.5" title="스타일러스 팝업 핀라이트 조명 (ON / OFF)">
+        <i data-lucide="flashlight" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span id="target-light-text">타깃 라이트</span>
+      </button>
+
+      <!-- 피치 페이더 실시간 상태 & 리셋 (신규) -->
+      <div class="hidden md:flex items-center gap-1.5 bg-white/5 border border-white/10 px-2 py-1 rounded-lg text-xs font-mono">
+        <span class="text-[10px] text-zinc-400">PITCH</span>
+        <span id="pitch-display-header" class="text-teal-300 font-bold min-w-[42px] text-center">0.0%</span>
+        <button id="btn-pitch-reset-header" class="text-[9px] px-1.5 py-0.5 rounded bg-white/10 hover:bg-teal-500 hover:text-black transition-colors" title="피치 0.0% 쿼츠 락 리셋">RESET</button>
+      </div>
+
+      <div class="h-4 w-[1px] bg-white/20 hidden sm:block"></div>
+
       <!-- 톤암 스윙 & 큐잉 퀵 컨트롤 버튼 -->
       <button id="btn-arm-swing" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-teal-300 border border-teal-500/30 transition-all flex items-center gap-1.5" title="톤암 위치 전환 (암레스트 ↔ 외곽 소리골 ↔ 내측 소리골)">
         <i data-lucide="disc" class="w-3.5 h-3.5 text-teal-400"></i>
@@ -101,30 +123,30 @@
       </button>
 
       <!-- 속도 모드 인디케이터 (33 / 45) -->
-      <button id="btn-toggle-rpm" class="px-2.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-white/10 hover:bg-white/20 text-teal-300 border border-teal-500/30 transition-all flex items-center gap-1" title="회전 속도 전환 (33⅓ / 45 RPM)">
+      <button id="btn-toggle-rpm" class="px-2 py-1.5 rounded-lg text-xs font-mono font-bold bg-white/10 hover:bg-white/20 text-teal-300 border border-teal-500/30 transition-all flex items-center gap-1" title="회전 속도 전환 (33⅓ / 45 RPM)">
         <span id="rpm-led" class="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_#2dd4bf]"></span>
         <span id="rpm-text">33⅓ RPM</span>
       </button>
 
-      <div class="h-5 w-[1px] bg-white/20 hidden sm:block"></div>
+      <div class="h-4 w-[1px] bg-white/20 hidden sm:block"></div>
 
       <!-- 카메라 뷰 프리셋 버튼 -->
-      <div class="flex items-center gap-1.5">
-        <button id="btn-view-hero" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-teal-500/25 hover:bg-teal-500/35 text-teal-300 border border-teal-500/50 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(45,212,191,0.25)]" title="사진 속 황금 각도 (21° 프론트 쿼터 히어로 샷)">
+      <div class="flex items-center gap-1">
+        <button id="btn-view-hero" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-teal-500/25 hover:bg-teal-500/35 text-teal-300 border border-teal-500/50 transition-all flex items-center gap-1 shadow-[0_0_12px_rgba(45,212,191,0.25)]" title="사진 속 황금 각도 (21° 프론트 쿼터 히어로 샷)">
           <i data-lucide="camera" class="w-3.5 h-3.5 text-teal-300"></i>
-          <span class="hidden sm:inline">📸 사진 각도</span>
+          <span class="hidden xl:inline">📸 사진 각도</span>
         </button>
-        <button id="btn-view-eye" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white/80 border border-white/10 transition-all flex items-center gap-1.5" title="스탠딩 눈높이 (32° 서서 내려다보기)">
+        <button id="btn-view-eye" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white/80 border border-white/10 transition-all flex items-center gap-1" title="스탠딩 눈높이 (32° 서서 내려다보기)">
           <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">👀 서서 보기</span>
+          <span class="hidden xl:inline">👀 서서 보기</span>
         </button>
-        <button id="btn-view-seated" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white/80 border border-white/10 transition-all flex items-center gap-1.5" title="좌식 눈높이 (14° 로우 앵글)">
+        <button id="btn-view-seated" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white/80 border border-white/10 transition-all flex items-center gap-1" title="좌식 눈높이 (14° 로우 앵글)">
           <i data-lucide="armchair" class="w-3.5 h-3.5 text-amber-300"></i>
-          <span class="hidden sm:inline">🪑 좌식</span>
+          <span class="hidden xl:inline">🪑 좌식</span>
         </button>
-        <button id="btn-view-top" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white/80 border border-white/10 transition-all flex items-center gap-1.5" title="탑뷰 (90° 수직 직각)">
+        <button id="btn-view-top" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white/80 border border-white/10 transition-all flex items-center gap-1" title="탑뷰 (90° 수직 직각)">
           <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-slate-400"></i>
-          <span class="hidden sm:inline">탑뷰</span>
+          <span class="hidden xl:inline">탑뷰</span>
         </button>
       </div>
     </div>
@@ -320,12 +342,21 @@
           </label>
 
           <!-- 레이어 8: 바늘 & 카트리지 어셈블리 (독립 컴포넌트 신규 분리) -->
-          <label class="flex items-center justify-between p-1.5 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer transition-colors group">
+          <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-white/5 cursor-pointer transition-colors group">
             <span class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]"></span>
-              <span class="font-bold text-amber-300">바늘 & 카트리지 (Stylus)</span>
+              <span class="font-medium text-amber-300">바늘 & 카트리지 (Stylus)</span>
             </span>
             <input type="checkbox" id="layer-cartridge" checked class="w-3.5 h-3.5 accent-amber-400 cursor-pointer rounded">
+          </label>
+
+          <!-- 레이어 9: 6단계 팝업 스타일러스 타깃 핀라이트 (신규) -->
+          <label class="flex items-center justify-between p-1.5 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer transition-colors group">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_6px_#fde047]"></span>
+              <span class="font-bold text-yellow-300">타깃 핀라이트 조명</span>
+            </span>
+            <input type="checkbox" id="layer-target-light" checked class="w-3.5 h-3.5 accent-yellow-400 cursor-pointer rounded">
           </label>
         </div>
 
@@ -462,6 +493,18 @@
     let counterweightBarrelMesh;  // 침압 실시간 연동 무게추 배럴
     let isCartridgeVisible = true;// 바늘 카트리지 독립 보이기/숨기기(장착/탈착) 상태
 
+    // 6단계: 피치 페이더 & 스타일러스 타깃 라이트 참조 변수
+    let pitchKnobMesh;            // 우측 ±8% 피치 슬라이더 노브
+    let quartzLedMesh;            // 0% 센터 쿼츠 락 그린 LED
+    let currentPitchPercent = 0.0;// 현재 피치 백분율 (-8.0% ~ +8.0%)
+    let isDraggingPitch = false;  // 피치 노브 마우스 드래그 상태
+
+    let targetLightGroup;         // 타깃 라이트 전체 어셈블리 그룹
+    let targetLightPillarMesh;    // 팝업 승강 실린더 필러
+    let targetLightLensMesh;      // 조명 프리즘 렌즈
+    let targetSpotLight;          // 웜화이트 3D 스팟 핀라이트
+    let isTargetLightOn = false;  // 타깃 라이트 팝업 점등 상태
+
     // 바늘 카트리지 독립 가시성(Show/Hide) 제어 헬퍼
     function setCartridgeVisibility(visible) {
       isCartridgeVisible = visible;
@@ -503,7 +546,352 @@
     const TONEARM_RUN_OUT_ANGLE = -0.965;  // LP 내측 런아웃 소리골 (-55.3°, R~60mm)
     const TONEARM_CUE_LIFT_RAD = 0.055;    // 큐잉 리프트 틸트 각도 (~3.15°, 바늘 ~8mm 상승)
 
-    let tonearmTargetAngle = TONEARM_REST_ANGLE;
+    // ==========================================
+    // 6단계: Web Audio API 아날로그 바이닐 사운드 & 음악 엔진
+    // ==========================================
+    let audioCtx = null;
+    let masterGain = null;
+    let isAudioMuted = false;
+
+    // 바이닐 서피스 노이즈
+    let crackleSource = null;
+    let crackleGain = null;
+
+    // 로파이 재즈 멜로디 신스 루프
+    let musicInterval = null;
+    let musicGain = null;
+    let musicFilter = null;
+    let currentPitchFactor = 1.0; // 1 + pitchPercent / 100
+    let isMusicPlaying = false;
+
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+          audioCtx = new AudioCtxClass();
+          masterGain = audioCtx.createGain();
+          masterGain.gain.setValueAtTime(0.75, audioCtx.currentTime);
+          masterGain.connect(audioCtx.destination);
+          setupContinuousCrackle();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // 1. 지속적인 바이닐 서피스 럼블 & 크랙클 버퍼 생성
+    function setupContinuousCrackle() {
+      if (!audioCtx) return;
+      const bufferSize = audioCtx.sampleRate * 4; // 4초 버퍼
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+
+      for (let i = 0; i < bufferSize; i++) {
+        let b0 = Math.random() * 2 - 1;
+        // 간헐적인 틱/팝 (Crackle) 스파이크
+        if (Math.random() < 0.002) {
+          b0 += (Math.random() > 0.5 ? 1 : -1) * (0.6 + Math.random() * 0.4);
+        }
+        output[i] = b0 * 0.12;
+      }
+
+      crackleSource = audioCtx.createBufferSource();
+      crackleSource.buffer = noiseBuffer;
+      crackleSource.loop = true;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1250;
+      filter.Q.value = 1.6;
+
+      crackleGain = audioCtx.createGain();
+      crackleGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+
+      crackleSource.connect(filter);
+      filter.connect(crackleGain);
+      crackleGain.connect(masterGain);
+      crackleSource.start(0);
+    }
+
+    // 2. 바늘 착지 '쿵/툭' 서브우퍼 럼블 사운드 (Needle Drop)
+    function playNeedleDropSound() {
+      ensureAudioContext();
+      if (!audioCtx || isAudioMuted) return;
+
+      const now = audioCtx.currentTime;
+
+      // 저역 서브 럼블
+      const osc = audioCtx.createOscillator();
+      const oscGain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(55, now);
+      osc.frequency.exponentialRampToValueAtTime(32, now + 0.18);
+
+      oscGain.gain.setValueAtTime(0.75, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.25);
+
+      // 마이크로 임펄스 클릭
+      const clickOsc = audioCtx.createOscillator();
+      const clickGain = audioCtx.createGain();
+      clickOsc.type = 'triangle';
+      clickOsc.frequency.setValueAtTime(220, now);
+      clickOsc.frequency.exponentialRampToValueAtTime(80, now + 0.04);
+      clickGain.gain.setValueAtTime(0.5, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+      clickOsc.connect(clickGain);
+      clickGain.connect(masterGain);
+      clickOsc.start(now);
+      clickOsc.stop(now + 0.06);
+
+      // 서피스 크랙클 볼륨 부드럽게 페이드인
+      if (crackleGain && isSpinning) {
+        crackleGain.gain.cancelScheduledValues(now);
+        crackleGain.gain.setValueAtTime(crackleGain.gain.value, now);
+        crackleGain.gain.linearRampToValueAtTime(0.20, now + 0.35);
+      }
+
+      // 음악 자동 시작
+      if (isSpinning && tonearmPosState === 'playing') {
+        startLoFiMusic();
+      }
+    }
+
+    // 3. 바늘 리프트업 (Needle Lift) 사운드
+    function playNeedleLiftSound() {
+      if (!audioCtx || isAudioMuted) return;
+      const now = audioCtx.currentTime;
+
+      const popOsc = audioCtx.createOscillator();
+      const popGain = audioCtx.createGain();
+      popOsc.type = 'sine';
+      popOsc.frequency.setValueAtTime(140, now);
+      popOsc.frequency.exponentialRampToValueAtTime(70, now + 0.08);
+      popGain.gain.setValueAtTime(0.3, now);
+      popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+      popOsc.connect(popGain);
+      popGain.connect(masterGain);
+      popOsc.start(now);
+      popOsc.stop(now + 0.1);
+
+      if (crackleGain) {
+        crackleGain.gain.cancelScheduledValues(now);
+        crackleGain.gain.setValueAtTime(crackleGain.gain.value, now);
+        crackleGain.gain.linearRampToValueAtTime(0.0001, now + 0.3);
+      }
+      stopLoFiMusic();
+    }
+
+    // 4. 모터 스핀업 사운드 (Spin Up)
+    function playSpinUpSound() {
+      ensureAudioContext();
+      if (!audioCtx || isAudioMuted) return;
+      const now = audioCtx.currentTime;
+
+      const humOsc = audioCtx.createOscillator();
+      const humGain = audioCtx.createGain();
+      humOsc.type = 'triangle';
+      humOsc.frequency.setValueAtTime(30, now);
+      humOsc.frequency.exponentialRampToValueAtTime(60 * currentPitchFactor, now + 0.7);
+
+      humGain.gain.setValueAtTime(0.001, now);
+      humGain.gain.linearRampToValueAtTime(0.18, now + 0.2);
+      humGain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+
+      humOsc.connect(humGain);
+      humGain.connect(masterGain);
+      humOsc.start(now);
+      humOsc.stop(now + 0.8);
+    }
+
+    // 5. 모터 슬로우다운 테이프 스탑 사운드 (Tape Stop)
+    function playSlowdownSound() {
+      if (!audioCtx || isAudioMuted) return;
+      const now = audioCtx.currentTime;
+
+      if (crackleGain) {
+        crackleGain.gain.cancelScheduledValues(now);
+        crackleGain.gain.setValueAtTime(crackleGain.gain.value, now);
+        crackleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+      }
+      stopLoFiMusic();
+    }
+
+    // 6. 아날로그 로파이 재즈 세션 신디사이저 (Lo-Fi Jazz Vinyl Session)
+    const JAZZ_CHORDS = [
+      [277.18, 329.63, 415.30, 493.88], // Dbm7
+      [207.65, 246.94, 311.13, 370.00], // Abm7
+      [185.00, 220.00, 277.18, 329.63], // Gbm7
+      [246.94, 311.13, 370.00, 440.00]  // B7
+    ];
+    let chordIndex = 0;
+
+    function startLoFiMusic() {
+      ensureAudioContext();
+      if (!audioCtx || isMusicPlaying || isAudioMuted) return;
+      isMusicPlaying = true;
+
+      musicGain = audioCtx.createGain();
+      musicGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      musicGain.gain.linearRampToValueAtTime(0.32, audioCtx.currentTime + 1.2);
+
+      musicFilter = audioCtx.createBiquadFilter();
+      musicFilter.type = 'lowpass';
+      musicFilter.frequency.value = 1800;
+      musicFilter.Q.value = 1.0;
+
+      musicGain.connect(musicFilter);
+      musicFilter.connect(masterGain);
+
+      playNextChord();
+      musicInterval = setInterval(playNextChord, 1800 / Math.max(0.2, currentPitchFactor));
+    }
+
+    function playNextChord() {
+      if (!audioCtx || !isMusicPlaying) return;
+      const notes = JAZZ_CHORDS[chordIndex % JAZZ_CHORDS.length];
+      chordIndex++;
+
+      const now = audioCtx.currentTime;
+      const chordDuration = (1.7 / Math.max(0.2, currentPitchFactor));
+
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const noteGain = audioCtx.createGain();
+
+        osc.type = (idx === 0) ? 'triangle' : 'sine';
+        const targetFreq = freq * currentPitchFactor * (currentRpm === 45 ? 1.333 : 1.0);
+        osc.frequency.setValueAtTime(targetFreq, now);
+
+        const delay = idx * 0.04;
+        noteGain.gain.setValueAtTime(0.001, now + delay);
+        noteGain.gain.linearRampToValueAtTime(0.18 / notes.length, now + delay + 0.08);
+        noteGain.gain.exponentialRampToValueAtTime(0.001, now + chordDuration);
+
+        osc.connect(noteGain);
+        noteGain.connect(musicGain);
+        osc.start(now + delay);
+        osc.stop(now + chordDuration + 0.1);
+      });
+    }
+
+    function stopLoFiMusic() {
+      if (musicInterval) {
+        clearInterval(musicInterval);
+        musicInterval = null;
+      }
+      isMusicPlaying = false;
+      if (musicGain && audioCtx) {
+        musicGain.gain.cancelScheduledValues(audioCtx.currentTime);
+        musicGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+      }
+    }
+
+    function updateAudioPitch(factor) {
+      currentPitchFactor = factor;
+      if (musicInterval && isMusicPlaying) {
+        clearInterval(musicInterval);
+        musicInterval = setInterval(playNextChord, 1800 / Math.max(0.2, currentPitchFactor));
+      }
+    }
+
+    function toggleAudioMute() {
+      isAudioMuted = !isAudioMuted;
+      const btnSound = document.getElementById('btn-toggle-sound');
+      const soundIcon = document.getElementById('sound-icon');
+      const soundText = document.getElementById('sound-text');
+
+      if (masterGain && audioCtx) {
+        masterGain.gain.setValueAtTime(isAudioMuted ? 0 : 0.75, audioCtx.currentTime);
+      }
+
+      if (isAudioMuted) {
+        if (soundIcon) soundIcon.setAttribute('data-lucide', 'volume-x');
+        if (soundText) soundText.textContent = '사운드 OFF';
+        if (btnSound) btnSound.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-zinc-400 border border-white/10 transition-all flex items-center gap-1.5';
+        stopLoFiMusic();
+      } else {
+        if (soundIcon) soundIcon.setAttribute('data-lucide', 'volume-2');
+        if (soundText) soundText.textContent = '사운드 ON';
+        if (btnSound) btnSound.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-teal-300 border border-teal-500/30 transition-all flex items-center gap-1.5';
+        ensureAudioContext();
+        if (isSpinning && !isCueingUp && tonearmPosState === 'playing') {
+          startLoFiMusic();
+        }
+      }
+      lucide.createIcons();
+    }
+
+    // 7. 피치 페이더 실시간 연동 제어 함수 (±8.0%)
+    function setPitchPercent(percent) {
+      currentPitchPercent = Math.max(-8.0, Math.min(8.0, percent));
+
+      // 3D 피치 노브 Z축 이동 (-55mm ~ +55mm, 아래쪽이 +가속, 위쪽이 -감속)
+      if (pitchKnobMesh) {
+        pitchKnobMesh.position.z = (currentPitchPercent / 8.0) * 55;
+      }
+
+      // 0% 센터 쿼츠 락 LED 점등 (에메랄드 그린)
+      const isZeroLock = Math.abs(currentPitchPercent) < 0.08;
+      if (quartzLedMesh) {
+        quartzLedMesh.material.color.setHex(isZeroLock ? 0x2dd4bf : 0x0f3b35);
+      }
+
+      // 상단 헤더 디스플레이 갱신
+      const dispHeader = document.getElementById('pitch-display-header');
+      if (dispHeader) {
+        const sign = currentPitchPercent > 0.04 ? '+' : '';
+        dispHeader.textContent = isZeroLock ? '0.0%' : `${sign}${currentPitchPercent.toFixed(1)}%`;
+        dispHeader.className = isZeroLock
+          ? 'text-teal-300 font-bold min-w-[42px] text-center shadow-[0_0_8px_rgba(45,212,191,0.5)]'
+          : 'text-amber-300 font-bold min-w-[42px] text-center';
+      }
+
+      // 오디오 팩터 및 엔진 갱신
+      currentPitchFactor = 1.0 + (currentPitchPercent / 100.0);
+      updateAudioPitch(currentPitchFactor);
+    }
+
+    // 8. 팝업 스타일러스 타깃 라이트 토글 함수
+    function toggleTargetLight(forceState) {
+      isTargetLightOn = (typeof forceState === 'boolean') ? forceState : !isTargetLightOn;
+
+      const btnTarget = document.getElementById('btn-toggle-target-light');
+      const lightIcon = document.getElementById('target-light-icon');
+      const lightText = document.getElementById('target-light-text');
+
+      if (isTargetLightOn) {
+        if (targetSpotLight) targetSpotLight.intensity = 3.2;
+        if (targetLightLensMesh) {
+          targetLightLensMesh.material.color.setHex(0xfff5ea);
+          targetLightLensMesh.material.emissive.setHex(0xffaa44);
+        }
+        if (lightIcon) lightIcon.className = 'w-3.5 h-3.5 text-amber-300 animate-pulse';
+        if (lightText) lightText.textContent = '타깃 라이트 ON';
+        if (btnTarget) {
+          btnTarget.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(251,191,36,0.25)]';
+        }
+      } else {
+        if (targetSpotLight) targetSpotLight.intensity = 0.0;
+        if (targetLightLensMesh) {
+          targetLightLensMesh.material.color.setHex(0x554433);
+          targetLightLensMesh.material.emissive.setHex(0x000000);
+        }
+        if (lightIcon) lightIcon.className = 'w-3.5 h-3.5 text-zinc-400';
+        if (lightText) lightText.textContent = '타깃 라이트';
+        if (btnTarget) {
+          btnTarget.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 transition-all flex items-center gap-1.5';
+        }
+      }
+      lucide.createIcons();
+    }
     let tonearmCurrentAngle = TONEARM_REST_ANGLE;
     let tonearmTargetTilt = 0;
     let tonearmCurrentTilt = 0;
@@ -658,12 +1046,17 @@
       // 11. 5단계: 3D 크롬 S자 톤암 파이프 & 테크닉스 실버 슬롯 헤드셀 & 바늘 안착 트래킹 빌드
       buildTonearmArm();
 
-      // 12. 바닥 소프트 앰비언트 그림자 평면
+      // 12. 6단계: 팝업 스타일러스 타깃 라이트 빌드
+      buildTargetLight();
+
+      // 13. 바닥 소프트 앰비언트 그림자 평면
       buildGroundShadow();
 
-      // 윈도우 리사이즈 및 3D 클릭 이벤트
+      // 윈도우 리사이즈 및 3D 클릭 & 피치 페이더 드래그 포인터 이벤트
       window.addEventListener('resize', onWindowResize);
-      canvas.addEventListener('pointerdown', onCanvasClick);
+      canvas.addEventListener('pointerdown', onCanvasPointerDown);
+      window.addEventListener('pointermove', onCanvasPointerMove);
+      window.addEventListener('pointerup', onCanvasPointerUp);
 
       // 컨트롤, 프리셋 버튼 및 레이어 체크박스 이벤트 연결
       setupControls();
@@ -1209,22 +1602,33 @@
       const trackGeo = new THREE.BoxGeometry(4, 3, 130);
       const trackMesh = new THREE.Mesh(trackGeo, new THREE.MeshStandardMaterial({ color: 0x07080c, roughness: 0.9 }));
       trackMesh.position.y = 1.6;
+      trackMesh.name = 'pitchTrack';
       pitchGroup.add(trackMesh);
 
+      // 피치 노브 어셈블리 (전역 pitchKnobMesh 바인딩)
+      pitchKnobMesh = new THREE.Group();
+      pitchKnobMesh.name = 'pitchKnob';
+      pitchKnobMesh.position.set(0, 6, 0);
+
       const knobGeo = new THREE.BoxGeometry(22, 10, 12);
-      const knobMesh = new THREE.Mesh(knobGeo, chromeMat);
-      knobMesh.position.set(0, 6, 0);
-      knobMesh.castShadow = true;
-      pitchGroup.add(knobMesh);
+      const knobBody = new THREE.Mesh(knobGeo, chromeMat);
+      knobBody.castShadow = true;
+      knobBody.name = 'pitchKnobBody';
+      pitchKnobMesh.add(knobBody);
 
       const knobLine = new THREE.Mesh(new THREE.BoxGeometry(18, 1, 1), new THREE.MeshBasicMaterial({ color: 0xffffff }));
-      knobLine.position.set(0, 11.1, 0);
-      pitchGroup.add(knobLine);
+      knobLine.position.set(0, 5.1, 0);
+      knobLine.name = 'pitchKnobLine';
+      pitchKnobMesh.add(knobLine);
 
+      pitchGroup.add(pitchKnobMesh);
+
+      // 0% 센터 쿼츠 락 LED (전역 quartzLedMesh 바인딩)
       const qzLedGeo = new THREE.CylinderGeometry(1.5, 1.5, 1, 16);
-      const qzLed = new THREE.Mesh(qzLedGeo, new THREE.MeshBasicMaterial({ color: 0x2dd4bf }));
-      qzLed.position.set(-8, 2.5, 0);
-      pitchGroup.add(qzLed);
+      quartzLedMesh = new THREE.Mesh(qzLedGeo, new THREE.MeshBasicMaterial({ color: 0x2dd4bf }));
+      quartzLedMesh.position.set(-8, 2.5, 0);
+      quartzLedMesh.name = 'pitchQuartzLed';
+      pitchGroup.add(quartzLedMesh);
 
       deckControlsGroup.add(pitchGroup);
 
@@ -2149,6 +2553,89 @@
     }
 
     // ==========================================
+    // 6단계: 팝업 스타일러스 타깃 라이트 (Target Light)
+    // ==========================================
+    function buildTargetLight() {
+      targetLightGroup = new THREE.Group();
+      targetLightGroup.name = 'targetLightGroup';
+      targetLightGroup.position.set(-176, 49.0, -25);
+      turntableGroup.add(targetLightGroup);
+
+      const collarMat = new THREE.MeshStandardMaterial({
+        color: 0xcfd6e2,
+        metalness: 0.92,
+        roughness: 0.18
+      });
+
+      const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0x94a3b8,
+        metalness: 0.88,
+        roughness: 0.22
+      });
+
+      // 베이스 고정 알루미늄 칼라
+      const collarGeo = new THREE.CylinderGeometry(9, 9.5, 4, 32);
+      const collarMesh = new THREE.Mesh(collarGeo, collarMat);
+      collarMesh.position.y = 2;
+      collarMesh.receiveShadow = true;
+      collarMesh.name = 'target_light_hit';
+      targetLightGroup.add(collarMesh);
+
+      // 팝업 승강 실린더 필러 어셈블리
+      targetLightPillarMesh = new THREE.Group();
+      targetLightPillarMesh.name = 'target_light_hit';
+      targetLightPillarMesh.position.y = 3; // 기본은 수납 상태 (Y = 3.0, 팝업 시 Y = 15.0)
+      targetLightGroup.add(targetLightPillarMesh);
+
+      // 실린더 기둥 본체
+      const pillarGeo = new THREE.CylinderGeometry(6.5, 6.5, 17, 32);
+      const pillarBody = new THREE.Mesh(pillarGeo, bodyMat);
+      pillarBody.position.y = 8.5;
+      pillarBody.castShadow = true;
+      pillarBody.name = 'target_light_hit';
+      targetLightPillarMesh.add(pillarBody);
+
+      // 상단 베벨 캡
+      const capGeo = new THREE.CylinderGeometry(6.5, 6.5, 2, 32);
+      const capMesh = new THREE.Mesh(capGeo, collarMat);
+      capMesh.position.y = 17.5;
+      capMesh.name = 'target_light_hit';
+      targetLightPillarMesh.add(capMesh);
+
+      // 바늘을 향하는 조명 슬릿 윈도우 프리즘 렌즈
+      const lensGeo = new THREE.BoxGeometry(4.2, 5, 2.5);
+      targetLightLensMesh = new THREE.Mesh(
+        lensGeo,
+        new THREE.MeshStandardMaterial({
+          color: 0x554433,
+          emissive: 0x000000,
+          roughness: 0.3
+        })
+      );
+      targetLightLensMesh.position.set(3.5, 12, 3.5);
+      targetLightLensMesh.rotation.y = -Math.PI / 4;
+      targetLightLensMesh.name = 'target_light_hit';
+      targetLightPillarMesh.add(targetLightLensMesh);
+
+      // 3D 웜화이트 스팟 핀라이트 (Technics 오리지널 바늘 타깃 조명)
+      targetSpotLight = new THREE.SpotLight(0xffeed6, 0, 420, Math.PI / 4.5, 0.45, 1.2);
+      targetSpotLight.position.set(4, 13, 4);
+      targetSpotLight.castShadow = true;
+      targetSpotLight.shadow.mapSize.width = 1024;
+      targetSpotLight.shadow.mapSize.height = 1024;
+      targetSpotLight.shadow.camera.near = 10;
+      targetSpotLight.shadow.camera.far = 450;
+
+      // 바늘 착지 위치를 향하는 조명 타깃
+      const lightTarget = new THREE.Object3D();
+      lightTarget.position.set(15 - (-176), 68 - 49, 45 - (-25));
+      targetLightGroup.add(lightTarget);
+      targetSpotLight.target = lightTarget;
+
+      targetLightPillarMesh.add(targetSpotLight);
+    }
+
+    // ==========================================
     // 바닥 소프트 앰비언트 섀도우 평면
     // ==========================================
     function buildGroundShadow() {
@@ -2168,9 +2655,12 @@
     }
 
     // ==========================================
-    // 3D 캔버스 클릭 인터랙션
+    // 3D 캔버스 클릭 & 피치 노브 드래그 인터랙션
     // ==========================================
-    function onCanvasClick(e) {
+    let dragStartY = 0;
+    let dragStartPitch = 0;
+
+    function onCanvasPointerDown(e) {
       if (e.button !== 0) return;
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -2178,31 +2668,64 @@
 
       raycaster.setFromCamera(mouse, camera);
 
-      // 1. 데크 컨트롤 기구 클릭 인터랙션
-      const intersects = raycaster.intersectObjects(deckControlsGroup.children, true);
-      if (intersects.length > 0) {
-        let obj = intersects[0].object;
-        while (obj && !obj.name && obj.parent) {
-          obj = obj.parent;
-        }
-
-        if (obj && obj.name === 'button_start_stop') {
-          animateButtonPress(startStopButtonMesh);
-          toggleSpin();
-          return;
-        } else if (obj && obj.name === 'button_speed_33') {
-          animateButtonPress(speedButton33Mesh);
-          setRpm(33);
-          return;
-        } else if (obj && obj.name === 'button_speed_45') {
-          animateButtonPress(speedButton45Mesh);
-          setRpm(45);
+      // 1. 피치 페이더 노브 드래그 인터랙션 감지
+      if (pitchKnobMesh) {
+        const knobHits = raycaster.intersectObjects(pitchKnobMesh.children, true);
+        if (knobHits.length > 0) {
+          isDraggingPitch = true;
+          controls.enabled = false;
+          dragStartY = e.clientY;
+          dragStartPitch = currentPitchPercent;
           return;
         }
       }
 
-      // 2. 톤암 어셈블리 3D 직접 클릭 인터랙션 (헤드셀, 바늘, 파이프 클릭 시 조작)
-      if (tonearmArmGroup) {
+      // 2. 스타일러스 타깃 라이트 클릭 인터랙션 (팝업 승강 및 웜 조명 점등)
+      if (targetLightGroup && targetLightGroup.visible) {
+        const lightHits = raycaster.intersectObjects(targetLightGroup.children, true);
+        if (lightHits.length > 0) {
+          toggleTargetLight();
+          return;
+        }
+      }
+
+      // 3. 데크 컨트롤 기구 클릭 인터랙션
+      if (deckControlsGroup && deckControlsGroup.visible) {
+        const intersects = raycaster.intersectObjects(deckControlsGroup.children, true);
+        if (intersects.length > 0) {
+          let obj = intersects[0].object;
+
+          // 피치 트랙 직접 클릭 시
+          if (obj && obj.name === 'pitchTrack') {
+            isDraggingPitch = true;
+            controls.enabled = false;
+            dragStartY = e.clientY;
+            dragStartPitch = currentPitchPercent;
+            return;
+          }
+
+          while (obj && !obj.name && obj.parent) {
+            obj = obj.parent;
+          }
+
+          if (obj && obj.name === 'button_start_stop') {
+            animateButtonPress(startStopButtonMesh);
+            toggleSpin();
+            return;
+          } else if (obj && obj.name === 'button_speed_33') {
+            animateButtonPress(speedButton33Mesh);
+            setRpm(33);
+            return;
+          } else if (obj && obj.name === 'button_speed_45') {
+            animateButtonPress(speedButton45Mesh);
+            setRpm(45);
+            return;
+          }
+        }
+      }
+
+      // 4. 톤암 어셈블리 3D 직접 클릭 인터랙션 (헤드셀, 바늘, 파이프 클릭 시 조작)
+      if (tonearmArmGroup && tonearmArmGroup.visible) {
         const armHits = raycaster.intersectObjects(tonearmArmGroup.children, true);
         if (armHits.length > 0) {
           if (tonearmPosState === 'rest') {
@@ -2212,6 +2735,22 @@
           }
           return;
         }
+      }
+    }
+
+    function onCanvasPointerMove(e) {
+      if (isDraggingPitch) {
+        const deltaY = e.clientY - dragStartY;
+        // 120픽셀 드래그 당 ±8.0% 피치 변화 (아래로 드래그 시 가속, 위로 드래그 시 감속)
+        const newPitch = dragStartPitch + (deltaY / 120.0) * 8.0;
+        setPitchPercent(newPitch);
+      }
+    }
+
+    function onCanvasPointerUp(e) {
+      if (isDraggingPitch) {
+        isDraggingPitch = false;
+        controls.enabled = true;
       }
     }
 
@@ -2237,14 +2776,18 @@
         spinIcon.setAttribute('data-lucide', 'pause');
         spinText.textContent = '회전 정지';
         btnSpin.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 flex items-center gap-1.5 shadow-[0_0_20px_rgba(251,146,60,0.5)] hover:scale-105 active:scale-95 transition-all';
+        playSpinUpSound();
         // 모터 회전 시 톤암이 암레스트에 있으면 자동으로 LP 외곽 소리골로 이동 착지
         if (tonearmPosState === 'rest') {
           setTonearmPosition('lead_in');
+        } else if (tonearmPosState === 'playing' && !isCueingUp) {
+          startLoFiMusic();
         }
       } else {
         spinIcon.setAttribute('data-lucide', 'play');
         spinText.textContent = '회전 시작';
         btnSpin.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-teal-500 to-emerald-400 text-slate-950 flex items-center gap-1.5 shadow-[0_0_15px_rgba(45,212,191,0.4)] hover:scale-105 active:scale-95 transition-all';
+        playSlowdownSound();
         // 모터 정지 시 톤암을 암레스트로 안전하게 복귀
         if (tonearmPosState !== 'rest') {
           setTonearmPosition('rest');
@@ -2297,6 +2840,9 @@
           setTimeout(() => {
             liftCue(false);
             updateTonearmUI();
+            if (isSpinning) {
+              setTimeout(playNeedleDropSound, 220);
+            }
           }, 700);
         }, 150);
       } else if (targetState === 'run_out') {
@@ -2307,15 +2853,28 @@
           setTimeout(() => {
             liftCue(false);
             updateTonearmUI();
+            if (isSpinning) {
+              setTimeout(playNeedleDropSound, 220);
+            }
           }, 700);
         }, 150);
       }
     }
 
     function liftCue(up) {
+      if (isCueingUp === up) return;
       isCueingUp = up;
       tonearmTargetTilt = up ? TONEARM_CUE_LIFT_RAD : 0;
       updateCueUI();
+
+      if (up) {
+        playNeedleLiftSound();
+      } else {
+        // 큐잉 레버 하강 시 바늘 착지 사운드
+        if (isSpinning && tonearmPosState === 'playing') {
+          setTimeout(playNeedleDropSound, 180);
+        }
+      }
     }
 
     function toggleCue() {
@@ -2409,6 +2968,14 @@
           setCartridgeVisibility(e.target.checked);
         });
       }
+
+      // 9. 6단계 스타일러스 타깃 라이트 레이어
+      const chkTargetLight = document.getElementById('layer-target-light');
+      if (chkTargetLight) {
+        chkTargetLight.addEventListener('change', (e) => {
+          if (targetLightGroup) targetLightGroup.visible = e.target.checked;
+        });
+      }
     }
 
     // ==========================================
@@ -2419,6 +2986,24 @@
       document.getElementById('btn-toggle-rpm').addEventListener('click', () => {
         setRpm(currentRpm === 33 ? 45 : 33);
       });
+
+      // 6단계 사운드 음소거 ON/OFF 토글
+      const btnSound = document.getElementById('btn-toggle-sound');
+      if (btnSound) {
+        btnSound.addEventListener('click', toggleAudioMute);
+      }
+
+      // 6단계 팝업 타깃 라이트 토글 버튼
+      const btnTargetLight = document.getElementById('btn-toggle-target-light');
+      if (btnTargetLight) {
+        btnTargetLight.addEventListener('click', () => toggleTargetLight());
+      }
+
+      // 6단계 피치 페이더 0.0% 쿼츠 리셋 버튼
+      const btnPitchReset = document.getElementById('btn-pitch-reset-header');
+      if (btnPitchReset) {
+        btnPitchReset.addEventListener('click', () => setPitchPercent(0.0));
+      }
 
       // 좌측 상단 바늘 카트리지 독립 보이기/숨기기(장착/탈착) 퀵 토글 버튼 이벤트
       const btnCartVis = document.getElementById('btn-toggle-cart-vis');
@@ -2612,12 +3197,18 @@
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // 33⅓ 또는 45 RPM 가속 및 감속 보간
-      const targetSpeed = isSpinning ? (currentRpm === 45 ? SPEED_45 : SPEED_33) : 0;
+      // 33⅓ 또는 45 RPM 가속 및 감속 보간 (피치 페이더 배율 실시간 연동)
+      const targetSpeed = isSpinning ? (currentRpm === 45 ? SPEED_45 : SPEED_33) * currentPitchFactor : 0;
       currentAngularSpeed += (targetSpeed - currentAngularSpeed) * 0.05;
 
       if (platterAssemblyGroup && currentAngularSpeed > 0.001) {
         platterAssemblyGroup.rotation.y -= currentAngularSpeed * dt;
+      }
+
+      // 6단계: 스타일러스 타깃 라이트 부드러운 승강 팝업 애니메이션 (Y = 3.0 수납 <-> 15.0 팝업)
+      if (targetLightPillarMesh) {
+        const targetPillarY = isTargetLightOn ? 15.0 : 3.0;
+        targetLightPillarMesh.position.y += (targetPillarY - targetLightPillarMesh.position.y) * 0.15;
       }
 
       // 5단계: 톤암 수평 스윙 보간 (부드러운 이징 이동)
