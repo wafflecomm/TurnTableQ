@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Modern Hi-Fi Turntable Studio - Audio-Technica & Denon Edition</title>
+  <title>Modern Hi-Fi Turntable Studio - Precision S-Arm Edition</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -47,7 +47,6 @@
       -webkit-user-select: none;
     }
 
-    /* 커스텀 스크롤바 */
     ::-webkit-scrollbar {
       width: 4px;
       height: 4px;
@@ -63,16 +62,15 @@
       background: rgba(255, 255, 255, 0.4);
     }
 
-    /* 미세 글래스모피즘 효과 */
     .glass-panel {
-      background: rgba(13, 17, 23, 0.78);
+      background: rgba(13, 17, 23, 0.82);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
     }
     .glass-panel-sub {
-      background: rgba(22, 27, 34, 0.65);
+      background: rgba(22, 27, 34, 0.68);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
@@ -86,8 +84,8 @@
       border-color: rgba(255, 255, 255, 0.25);
     }
     .glass-btn-active {
-      background: linear-gradient(135deg, rgba(20, 184, 166, 0.25), rgba(16, 185, 129, 0.25));
-      border: 1px solid rgba(45, 212, 191, 0.5);
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.28), rgba(16, 185, 129, 0.28));
+      border: 1px solid rgba(45, 212, 191, 0.55);
       color: #5eead4;
     }
   </style>
@@ -106,15 +104,21 @@
       <div>
         <div class="flex items-center gap-2">
           <span class="text-[10px] tracking-[0.22em] text-teal-400 uppercase font-bold">Pure Hi-Fi Studio</span>
-          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/15 text-teal-300 border border-teal-500/30">Belt Drive & S-Arm</span>
-          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/10 text-zinc-300 border border-white/15">오디오테크니카 & 데논 에디션</span>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/15 text-teal-300 border border-teal-500/30">Precision S-Arm Geometry</span>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">실물 1:1 정밀 튜너 탑재</span>
         </div>
-        <h1 class="text-sm font-semibold tracking-wide text-white/95">Modern Minimalist Audiophile Turntable</h1>
+        <h1 class="text-sm font-semibold tracking-wide text-white/95">Denon & Audio-Technica Inspired Modern Audiophile Turntable</h1>
       </div>
     </div>
 
-    <!-- 우측 컨트롤: 사운드 토글, 볼륨, 분해 보기 -->
+    <!-- 우측 컨트롤: 톤암 튜너 토글, 사운드 토글, 볼륨, 레이어 분해 -->
     <div class="flex items-center gap-3">
+      <!-- 톤암 실시간 지오메트리 튜너 열기 버튼 -->
+      <button id="btn-toggle-tuner" class="px-3 py-1.5 rounded-lg text-xs font-semibold glass-btn text-amber-300 border-amber-500/30 hover:border-amber-400 flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]" title="톤암 곡선 형태를 실시간으로 미세 조절">
+        <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i>
+        <span>톤암 곡률 튜너</span>
+      </button>
+
       <!-- 아날로그 사운드 토글 -->
       <button id="btn-toggle-sound" class="px-3 py-1.5 rounded-lg text-xs font-semibold glass-btn text-teal-300 flex items-center gap-2" title="LP 사운드 및 모터 럼블 사운드">
         <i id="sound-icon" data-lucide="volume-2" class="w-4 h-4 text-teal-400"></i>
@@ -222,7 +226,7 @@
       </div>
       <div class="flex items-center justify-between text-zinc-400">
         <span>톤암 상태:</span>
-        <span id="stat-arm" class="text-teal-300 font-semibold">암레스트 대기</span>
+        <span id="stat-arm" class="text-teal-300 font-semibold">암레스트 안착</span>
       </div>
       <div class="flex items-center justify-between text-zinc-400">
         <span>침압 (VTF):</span>
@@ -231,46 +235,119 @@
     </div>
   </aside>
 
-  <!-- 3. 우측: 6종 카트리지 실시간 핫스왑 셀렉터 패널 -->
-  <aside class="absolute right-6 top-20 z-20 w-72 glass-panel rounded-2xl p-4 flex flex-col gap-3 max-h-[calc(100vh-160px)] overflow-y-auto">
+  <!-- 3. 우측: 톤암 실시간 지오메트리 튜너 플로팅 모달 (신규 탑재) -->
+  <aside id="panel-tonearm-tuner" class="absolute right-6 top-20 z-30 w-80 glass-panel rounded-2xl p-4 flex flex-col gap-3 shadow-[0_12px_40px_rgba(0,0,0,0.65)] border border-amber-500/30">
     <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
       <div class="flex items-center gap-2">
-        <i data-lucide="sparkles" class="w-4 h-4 text-teal-400"></i>
-        <span class="text-xs font-bold uppercase tracking-wider text-zinc-200">카트리지 핫스왑 (6종)</span>
+        <i data-lucide="git-commit" class="w-4 h-4 text-amber-400"></i>
+        <div>
+          <div class="text-xs font-bold text-amber-300">톤암 S-Curve 실시간 튜너</div>
+          <div class="text-[9px] text-zinc-400">실물 다이어그램 1:1 곡률 제어기</div>
+        </div>
       </div>
-      <span class="text-[10px] px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-mono font-bold">6 PRESETS</span>
+      <button id="btn-close-tuner" class="p-1 rounded-lg text-zinc-400 hover:text-white glass-btn">
+        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+      </button>
     </div>
 
-    <!-- 카트리지 목록 -->
-    <div id="cartridge-list" class="flex flex-col gap-2">
-      <!-- 동적으로 렌더링 -->
+    <!-- 4대 실물 프리셋 빠른 선택 -->
+    <div class="flex flex-col gap-1.5">
+      <span class="text-[10px] font-bold text-zinc-300 uppercase">1. 실물 톤암 스타일 프리셋</span>
+      <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+        <button id="preset-denon" class="px-2 py-1.5 rounded-lg glass-btn-active font-semibold text-left flex items-center justify-between">
+          <span>데논 DP-400 딥 S-암</span>
+          <i data-lucide="check" class="w-3 h-3 text-teal-400"></i>
+        </button>
+        <button id="preset-diagram" class="px-2 py-1.5 rounded-lg glass-btn text-zinc-300 font-semibold text-left flex items-center justify-between hover:text-white">
+          <span>다이어그램 1:1 매칭</span>
+        </button>
+        <button id="preset-technics" class="px-2 py-1.5 rounded-lg glass-btn text-zinc-300 font-semibold text-left flex items-center justify-between hover:text-white">
+          <span>테크닉스 스텔스 S</span>
+        </button>
+        <button id="preset-at" class="px-2 py-1.5 rounded-lg glass-btn text-zinc-300 font-semibold text-left flex items-center justify-between hover:text-white">
+          <span>오디오테크니카 J-암</span>
+        </button>
+      </div>
     </div>
 
-    <!-- 카트리지 사양 카드 -->
-    <div id="cartridge-detail-card" class="p-3 rounded-xl bg-black/50 border border-teal-500/30 text-[11px] flex flex-col gap-1">
-      <div class="flex items-center justify-between font-bold text-teal-300" id="detail-name">Audio-Technica AT-VM95E</div>
-      <div class="text-[10px] text-zinc-400" id="detail-desc">정밀 타원 바늘, 풍부하고 균형 잡힌 오디오필 사운드</div>
-      <div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1 text-[10px] text-zinc-300 pt-1 border-t border-white/10">
-        <div>방식: <span id="detail-type" class="text-white font-semibold">Dual MM</span></div>
-        <div>침압: <span id="detail-vtf" class="text-amber-400 font-semibold font-mono">2.0 g</span></div>
-        <div>출력: <span id="detail-output" class="text-white font-semibold">4.0 mV</span></div>
-        <div>소재: <span id="detail-body" class="text-white font-semibold">에메랄드 그린</span></div>
+    <!-- 미세 튜닝 슬라이더 -->
+    <div class="flex flex-col gap-2.5 pt-2 border-t border-white/10 text-[11px]">
+      <span class="text-[10px] font-bold text-zinc-300 uppercase">2. 3D 곡선 수치 직접 조절</span>
+
+      <!-- 1차 우측 휨 깊이 -->
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-zinc-300">
+          <span>1차 우측 휨 깊이 (Right Apex):</span>
+          <span id="val-right-apex" class="text-amber-400 font-mono font-bold">+30.0 mm</span>
+        </div>
+        <input type="range" id="slider-right-apex" min="4" max="48" step="1" value="30" class="w-full h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-amber-400">
+      </div>
+
+      <!-- 2차 좌측 꺾임 각도 -->
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-zinc-300">
+          <span>2차 좌측 꺾임 각도 (Left Offset):</span>
+          <span id="val-left-angle" class="text-teal-400 font-mono font-bold">-23.5 °</span>
+        </div>
+        <input type="range" id="slider-left-angle" min="-40" max="-10" step="0.5" value="-23.5" class="w-full h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-teal-400">
+      </div>
+
+      <!-- 상하 3D 굴곡 -->
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-zinc-300">
+          <span>상하 3D 굴곡 (Vertical Elevation):</span>
+          <span id="val-elevation" class="text-white font-mono font-bold">2.5 mm</span>
+        </div>
+        <input type="range" id="slider-elevation" min="0" max="6" step="0.5" value="2.5" class="w-full h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-teal-400">
+      </div>
+
+      <!-- 파이프 직경 (두께) -->
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-zinc-300">
+          <span>파이프 두께 (Pipe Thickness):</span>
+          <span id="val-thickness" class="text-white font-mono font-bold">4.0 mm</span>
+        </div>
+        <input type="range" id="slider-thickness" min="2.8" max="5.5" step="0.2" value="4.0" class="w-full h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-teal-400">
+      </div>
+    </div>
+
+    <!-- 파이프 마감 색상 -->
+    <div class="flex flex-col gap-1.5 pt-2 border-t border-white/10">
+      <span class="text-[10px] font-bold text-zinc-300 uppercase">3. 파이프 메탈 피니시</span>
+      <div class="grid grid-cols-3 gap-1 text-[10px]">
+        <button id="color-black" class="py-1 rounded-lg glass-btn-active font-semibold">새틴 블랙</button>
+        <button id="color-gunmetal" class="py-1 rounded-lg glass-btn text-zinc-300 hover:text-white font-semibold">건메탈</button>
+        <button id="color-silver" class="py-1 rounded-lg glass-btn text-zinc-300 hover:text-white font-semibold">실버 크롬</button>
       </div>
     </div>
   </aside>
 
-  <!-- 4. 하단: 메인 컨트롤 독 (플레이어 조작 & 카메라 뷰포인트) -->
+  <!-- 4. 우측: 6종 카트리지 실시간 핫스왑 셀렉터 패널 (하단 배치) -->
+  <aside id="panel-cartridge" class="absolute right-6 bottom-24 z-20 w-80 glass-panel rounded-2xl p-3.5 flex flex-col gap-2 max-h-56 overflow-y-auto">
+    <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+      <div class="flex items-center gap-2">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-teal-400"></i>
+        <span class="text-xs font-bold uppercase tracking-wider text-zinc-200">카트리지 핫스왑 (6종)</span>
+      </div>
+      <span id="detail-name-mini" class="text-[10px] text-teal-300 font-bold font-mono">AT-VM95E (2.0g)</span>
+    </div>
+
+    <!-- 카트리지 목록 -->
+    <div id="cartridge-list" class="grid grid-cols-3 gap-1.5">
+      <!-- 동적으로 렌더링 -->
+    </div>
+  </aside>
+
+  <!-- 5. 하단: 메인 컨트롤 독 (플레이어 조작 & 카메라 뷰포인트) -->
   <footer class="relative z-20 w-full px-6 py-4 flex flex-wrap items-center justify-between gap-4 glass-panel border-t border-white/10">
     <!-- 좌측: 모터 속도 및 재생 컨트롤 -->
     <div class="flex items-center gap-3">
-      <!-- 33 / 45 / STOP 다이얼 버튼 그룹 -->
       <div class="flex items-center p-1 rounded-xl glass-panel-sub border border-white/10">
         <button id="btn-speed-33" class="px-3.5 py-1.5 rounded-lg text-xs font-bold glass-btn-active transition-all" title="33 ⅓ RPM 재생">33 RPM</button>
         <button id="btn-speed-stop" class="px-3.5 py-1.5 rounded-lg text-xs font-bold glass-btn transition-all text-zinc-400" title="플래터 모터 정지">STOP</button>
         <button id="btn-speed-45" class="px-3.5 py-1.5 rounded-lg text-xs font-bold glass-btn transition-all text-zinc-400" title="45 RPM 고속 재생">45 RPM</button>
       </div>
 
-      <!-- 플래터 전원 스위치 -->
       <button id="btn-platter-toggle" class="px-4 py-2 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 flex items-center gap-2 shadow-[0_0_15px_rgba(20,184,166,0.4)] transition-all">
         <i id="play-icon" data-lucide="play" class="w-4 h-4 fill-current"></i>
         <span id="play-text">회전 시작</span>
@@ -279,19 +356,16 @@
 
     <!-- 중앙: 톤암 큐잉 및 바늘 착지 컨트롤 -->
     <div class="flex items-center gap-2.5">
-      <!-- 큐잉 레버 (UP / DOWN) -->
       <button id="btn-cue-lever" class="px-3.5 py-2 rounded-xl text-xs font-semibold glass-btn text-amber-300 border-amber-500/30 hover:border-amber-400 flex items-center gap-2" title="유압 큐잉 레버 (바늘 올림 / 내림)">
         <i id="cue-icon" data-lucide="arrow-up" class="w-4 h-4 text-amber-400"></i>
         <span id="cue-text">큐잉 LIFT (올림)</span>
       </button>
 
-      <!-- 오토 플레이 (소리골 착지) -->
       <button id="btn-auto-play" class="px-3.5 py-2 rounded-xl text-xs font-semibold glass-btn text-teal-300 border-teal-500/30 hover:border-teal-400 flex items-center gap-2" title="톤암을 첫 트랙 소리골(Lead-in)로 이동">
         <i data-lucide="disc-3" class="w-4 h-4 text-teal-400"></i>
         <span>소리골 자동 착지</span>
       </button>
 
-      <!-- 암레스트 복귀 -->
       <button id="btn-arm-return" class="px-3.5 py-2 rounded-xl text-xs font-semibold glass-btn text-zinc-300 hover:text-white flex items-center gap-2" title="톤암을 안전 암레스트로 복귀">
         <i data-lucide="corner-down-left" class="w-4 h-4 text-zinc-400"></i>
         <span>암레스트 복귀</span>
@@ -300,7 +374,10 @@
 
     <!-- 우측: 5대 카메라 뷰포인트 프리셋 -->
     <div class="flex items-center gap-1.5 p-1 rounded-xl glass-panel-sub border border-white/10">
-      <button data-cam="quarter" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn-active" title="쿼터 뷰 (45도 입체)">
+      <button data-cam="tonearm" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn-active text-teal-300 border border-teal-500/30" title="톤암 S자 파이프 집중 확대">
+        톤암뷰
+      </button>
+      <button data-cam="quarter" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn text-zinc-400" title="쿼터 뷰 (45도 입체)">
         쿼터뷰
       </button>
       <button data-cam="top" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn text-zinc-400" title="탑뷰 (상단 직하)">
@@ -308,9 +385,6 @@
       </button>
       <button data-cam="front" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn text-zinc-400" title="정면 프로필">
         정면뷰
-      </button>
-      <button data-cam="tonearm" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn text-zinc-400" title="톤암 및 S자 파이프">
-        톤암뷰
       </button>
       <button data-cam="stylus" class="cam-btn px-2.5 py-1.5 rounded-lg text-xs font-medium glass-btn text-zinc-400" title="바늘 소리골 마크로 확대">
         마크로
@@ -324,72 +398,12 @@
   <script>
     // 1. 카트리지 6종 정의
     const CARTRIDGES = [
-      {
-        id: 'vm95e',
-        brand: 'Audio-Technica',
-        name: 'AT-VM95E',
-        type: 'Dual MM',
-        color: 0x10b981, // 에메랄드 그린
-        vtf: 2.0,
-        output: '4.0 mV',
-        desc: '정밀 타원 바늘, 풍부하고 균형 잡힌 오디오필 사운드',
-        accentColor: '#10b981'
-      },
-      {
-        id: '2mred',
-        brand: 'Ortofon',
-        name: '2M Red',
-        type: 'Moving Magnet',
-        color: 0xef4444, // 비비드 레드
-        vtf: 1.8,
-        output: '5.5 mV',
-        desc: '다이내믹하고 생동감 넘치는 고해상도 사운드',
-        accentColor: '#ef4444'
-      },
-      {
-        id: '2mblue',
-        brand: 'Ortofon',
-        name: '2M Blue',
-        type: 'Nude MM',
-        color: 0x2563eb, // 코발트 블루
-        vtf: 1.8,
-        output: '5.5 mV',
-        desc: '누드 타원 다이아몬드, 극도의 해상도와 투명한 보컬',
-        accentColor: '#2563eb'
-      },
-      {
-        id: 'm75ed',
-        brand: 'Shure',
-        name: 'M75ED Type 2',
-        type: 'Vintage MM',
-        color: 0x3b352e, // 차콜 빈티지
-        vtf: 1.25,
-        output: '5.0 mV',
-        desc: '따뜻하고 두터운 아날로그 감성의 클래식 빈티지 사운드',
-        accentColor: '#d97706'
-      },
-      {
-        id: 'dl103',
-        brand: 'Denon',
-        name: 'DL-103',
-        type: 'Moving Coil (MC)',
-        color: 0x0f1115, // 피아노 블랙 바디 + 골드
-        vtf: 2.5,
-        output: '0.3 mV',
-        desc: '방송국 표준의 전설적인 명기 MC 카트리지',
-        accentColor: '#eab308'
-      },
-      {
-        id: 'at3600l',
-        brand: 'Audio-Technica',
-        name: 'AT3600L',
-        type: 'Standard MM',
-        color: 0xe2e8f0, // 크림 화이트
-        vtf: 3.0,
-        output: '4.2 mV',
-        desc: '뛰어난 내구성과 안정적인 트래킹 성능의 표준 카트리지',
-        accentColor: '#94a3b8'
-      }
+      { id: 'vm95e', brand: 'Audio-Technica', name: 'AT-VM95E', type: 'Dual MM', color: 0x10b981, vtf: 2.0, accentColor: '#10b981' },
+      { id: '2mred', brand: 'Ortofon', name: '2M Red', type: 'Moving Magnet', color: 0xef4444, vtf: 1.8, accentColor: '#ef4444' },
+      { id: '2mblue', brand: 'Ortofon', name: '2M Blue', type: 'Nude MM', color: 0x2563eb, vtf: 1.8, accentColor: '#2563eb' },
+      { id: 'm75ed', brand: 'Shure', name: 'M75ED Type 2', type: 'Vintage MM', color: 0x3b352e, vtf: 1.25, accentColor: '#d97706' },
+      { id: 'dl103', brand: 'Denon', name: 'DL-103', type: 'Moving Coil', color: 0x0f1115, vtf: 2.5, accentColor: '#eab308' },
+      { id: 'at3600l', brand: 'Audio-Technica', name: 'AT3600L', type: 'Standard MM', color: 0xe2e8f0, vtf: 3.0, accentColor: '#94a3b8' }
     ];
 
     let currentCartridgeIndex = 0;
@@ -417,17 +431,14 @@
         this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
         this.masterGain.connect(this.ctx.destination);
 
-        // 표면 잡음 (Hiss & Surface Noise)
         this.surfaceGain = this.ctx.createGain();
         this.surfaceGain.gain.setValueAtTime(0, this.ctx.currentTime);
         this.surfaceGain.connect(this.masterGain);
 
-        // 모터 럼블 (Sub-bass rumble)
         this.rumbleGain = this.ctx.createGain();
         this.rumbleGain.gain.setValueAtTime(0, this.ctx.currentTime);
         this.rumbleGain.connect(this.masterGain);
 
-        // 음악 합성 (아날로그 따뜻한 코드 사운드)
         this.musicGain = this.ctx.createGain();
         this.musicGain.gain.setValueAtTime(0, this.ctx.currentTime);
         this.musicGain.connect(this.masterGain);
@@ -438,7 +449,6 @@
       }
 
       createSurfaceNoise() {
-        // 핑크 노이즈 버퍼 생성 (LP 표면 마찰음)
         const bufferSize = this.ctx.sampleRate * 2;
         const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const output = noiseBuffer.getChannelData(0);
@@ -468,12 +478,9 @@
         filter.connect(this.surfaceGain);
         whiteNoise.start();
 
-        // 불규칙 크랙클 (Crackle / Pop)
         setInterval(() => {
           if (this.isPlaying && this.isNeedleOnVinyl && !this.isMuted && this.ctx) {
-            if (Math.random() < 0.35) {
-              this.playCrackle();
-            }
+            if (Math.random() < 0.35) this.playCrackle();
           }
         }, 180);
       }
@@ -495,14 +502,13 @@
       createRumbleNoise() {
         const osc = this.ctx.createOscillator();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(28, this.ctx.currentTime); // 28Hz 턴테이블 모터 럼블
+        osc.frequency.setValueAtTime(28, this.ctx.currentTime);
         osc.connect(this.rumbleGain);
         osc.start();
       }
 
       createMusicSynth() {
-        // 따뜻한 재즈/소울 코드 아날로그 합성 (Fmaj7 - Am7 - Dm7)
-        const notes = [174.61, 220.0, 261.63, 329.63]; // F3, A3, C4, E4
+        const notes = [174.61, 220.0, 261.63, 329.63];
         notes.forEach(freq => {
           const osc = this.ctx.createOscillator();
           osc.type = 'sawtooth';
@@ -548,14 +554,12 @@
           this.masterGain.gain.setTargetAtTime(this.volume, now, 0.05);
         }
 
-        // 플래터 회전 시 모터 럼블
         if (this.isPlaying) {
           this.rumbleGain.gain.setTargetAtTime(0.08, now, 0.2);
         } else {
           this.rumbleGain.gain.setTargetAtTime(0, now, 0.3);
         }
 
-        // 바늘이 닿아있고 플래터가 돌 때만 표면 소음 및 음악 재생
         if (this.isPlaying && this.isNeedleOnVinyl) {
           this.surfaceGain.gain.setTargetAtTime(0.12, now, 0.2);
           this.musicGain.gain.setTargetAtTime(0.04, now, 0.4);
@@ -594,50 +598,39 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
+    renderer.toneMappingExposure = 1.20;
     container.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
-    controls.maxPolarAngle = Math.PI / 2 - 0.02; // 바닥 아래로 카메라 이동 방지
+    controls.maxPolarAngle = Math.PI / 2 - 0.02;
     controls.minDistance = 90;
     controls.maxDistance = 800;
 
-    // 조명 시스템 (오디오필 스튜디오 하이라이트 셋업)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
+    // 조명 시스템
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfffaed, 1.25);
-    keyLight.position.set(180, 320, 220);
+    const keyLight = new THREE.DirectionalLight(0xfffaed, 1.35);
+    keyLight.position.set(190, 340, 220);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
     keyLight.shadow.bias = -0.0003;
-    keyLight.shadow.camera.near = 50;
-    keyLight.shadow.camera.far = 800;
-    const d = 260;
-    keyLight.shadow.camera.left = -d;
-    keyLight.shadow.camera.right = d;
-    keyLight.shadow.camera.top = d;
-    keyLight.shadow.camera.bottom = -d;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x93c5fd, 0.45);
+    const fillLight = new THREE.DirectionalLight(0x93c5fd, 0.5);
     fillLight.position.set(-240, 180, -180);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0x5eead4, 0.7);
-    rimLight.position.set(220, 140, -260);
+    const rimLight = new THREE.DirectionalLight(0x5eead4, 0.75);
+    rimLight.position.set(220, 150, -260);
     scene.add(rimLight);
 
-    // 하단 반사 바닥면
+    // 바닥면
     const groundGeo = new THREE.PlaneGeometry(3000, 3000);
-    const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x07080b,
-      roughness: 0.85,
-      metalness: 0.2
-    });
+    const groundMat = new THREE.MeshStandardMaterial({ color: 0x07080b, roughness: 0.85, metalness: 0.2 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -26;
@@ -645,11 +638,11 @@
     scene.add(ground);
 
     // 4. 5대 계층 레이어 그룹 생성
-    const layer1_PlinthGroup = new THREE.Group();      // 레이어 1: 섀시 플린스
-    const layer2_PlatterGroup = new THREE.Group();     // 레이어 2: 플래터 & 벨트 & 바이닐
-    const layer3_ControlsGroup = new THREE.Group();    // 레이어 3: 데크 조작계 (로터리)
-    const layer4_TonearmGroup = new THREE.Group();     // 레이어 4: 톤암 어셈블리 (S-암, 짐벌)
-    const layer5_CartridgeGroup = new THREE.Group();   // 레이어 5: 헤드셀 & 카트리지
+    const layer1_PlinthGroup = new THREE.Group();
+    const layer2_PlatterGroup = new THREE.Group();
+    const layer3_ControlsGroup = new THREE.Group();
+    const layer4_TonearmGroup = new THREE.Group();
+    const layer5_CartridgeGroup = new THREE.Group();
 
     scene.add(layer1_PlinthGroup);
     scene.add(layer2_PlatterGroup);
@@ -658,15 +651,10 @@
     scene.add(layer5_CartridgeGroup);
 
     // ==========================================
-    // [LAYER 1] 모던 프리미엄 솔리드 블랙 플린스 리모델링
+    // [LAYER 1] 모던 솔리드 블랙 플린스
     // ==========================================
     function buildLayer1_Plinth() {
-      // 1. 단일 솔리드 새틴 피아노 블랙 바디 (Corner Radius 가공)
-      const plinthWidth = 420;
-      const plinthDepth = 340;
-      const plinthHeight = 40;
-      const cornerR = 18;
-
+      const plinthWidth = 420, plinthDepth = 340, plinthHeight = 40, cornerR = 18;
       const shape = new THREE.Shape();
       const hw = plinthWidth / 2 - cornerR;
       const hd = plinthDepth / 2 - cornerR;
@@ -681,79 +669,45 @@
       shape.lineTo(-plinthWidth / 2, -hd);
       shape.absarc(-hw, -hd, cornerR, Math.PI, Math.PI * 1.5, false);
 
-      const extrudeSettings = {
-        depth: plinthHeight,
-        bevelEnabled: true,
-        bevelSegments: 6,
-        steps: 1,
-        bevelSize: 2.2,
-        bevelThickness: 2.2
-      };
-
+      const extrudeSettings = { depth: plinthHeight, bevelEnabled: true, bevelSegments: 6, steps: 1, bevelSize: 2.2, bevelThickness: 2.2 };
       const plinthGeo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
       plinthGeo.center();
 
-      const plinthMat = new THREE.MeshStandardMaterial({
-        color: 0x111317,
-        roughness: 0.22,
-        metalness: 0.18,
-        envMapIntensity: 1.0
-      });
-
+      const plinthMat = new THREE.MeshStandardMaterial({ color: 0x111317, roughness: 0.22, metalness: 0.18 });
       const plinthMesh = new THREE.Mesh(plinthGeo, plinthMat);
       plinthMesh.rotation.x = Math.PI / 2;
-      plinthMesh.position.y = 0;
       plinthMesh.castShadow = true;
       plinthMesh.receiveShadow = true;
       layer1_PlinthGroup.add(plinthMesh);
 
-      // 2. 4개의 대구경 안티 바이브레이션 인슐레이터 발 (Footers)
+      // 4개 대구경 방진 발
       const footGeo = new THREE.CylinderGeometry(24, 26, 16, 32);
-      const footMat = new THREE.MeshStandardMaterial({
-        color: 0x22262d,
-        metalness: 0.85,
-        roughness: 0.3
-      });
-      const rubberPadMat = new THREE.MeshStandardMaterial({
-        color: 0x0b0c0e,
-        roughness: 0.95
-      });
+      const footMat = new THREE.MeshStandardMaterial({ color: 0x22262d, metalness: 0.85, roughness: 0.3 });
+      const rubberPadMat = new THREE.MeshStandardMaterial({ color: 0x0b0c0e, roughness: 0.95 });
 
-      const footPositions = [
-        [-175, 135],
-        [175, 135],
-        [-175, -135],
-        [175, -135]
-      ];
-
-      footPositions.forEach(([fx, fz]) => {
+      [[-175, 135], [175, 135], [-175, -135], [175, -135]].forEach(([fx, fz]) => {
         const foot = new THREE.Group();
         const metalBody = new THREE.Mesh(footGeo, footMat);
         metalBody.castShadow = true;
-
         const rubberPad = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 3, 32), rubberPadMat);
         rubberPad.position.y = -8.5;
-
         foot.add(metalBody);
         foot.add(rubberPad);
         foot.position.set(fx, -20, fz);
         layer1_PlinthGroup.add(foot);
       });
 
-      // 3. 우측 하단 정갈한 미니멀 메탈 로고 엠블럼 플레이트
-      const badgeGeo = new THREE.BoxGeometry(46, 1.2, 14);
-      const badgeMat = new THREE.MeshStandardMaterial({
-        color: 0x94a3b8,
-        metalness: 0.9,
-        roughness: 0.2
-      });
-      const badge = new THREE.Mesh(badgeGeo, badgeMat);
+      // 우측 하단 메탈 엠블럼
+      const badge = new THREE.Mesh(
+        new THREE.BoxGeometry(46, 1.2, 14),
+        new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 })
+      );
       badge.position.set(160, plinthHeight / 2 + 1.2, 140);
       layer1_PlinthGroup.add(badge);
     }
 
     // ==========================================
-    // [LAYER 2] 플래터 & 벨트 구동계 & 바이닐 음반
+    // [LAYER 2] 플래터 & 벨트 구동계
     // ==========================================
     const platterCenter = { x: -48, z: 6 };
     let platterMeshGroup = new THREE.Group();
@@ -761,30 +715,18 @@
 
     function buildLayer2_PlatterAndBelt() {
       platterMeshGroup.position.set(platterCenter.x, 22, platterCenter.z);
+      const platterRadius = 146, platterHeight = 16;
 
-      // 1. 다크 아노다이징 본체 + 듀얼 머시닝 실버 림 투톤 플래터
-      const platterRadius = 146;
-      const platterHeight = 16;
-
-      // 주 바디 (다크 아노다이징)
       const bodyGeo = new THREE.CylinderGeometry(platterRadius, platterRadius, platterHeight, 64);
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: 0x1f2329,
-        metalness: 0.8,
-        roughness: 0.25
-      });
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1f2329, metalness: 0.8, roughness: 0.25 });
       const body = new THREE.Mesh(bodyGeo, bodyMat);
       body.castShadow = true;
       body.receiveShadow = true;
       platterMeshGroup.add(body);
 
-      // 상하단 듀얼 머시닝 실버 림 링
+      // 머시닝 실버 림
       const rimGeo = new THREE.CylinderGeometry(platterRadius + 0.8, platterRadius + 0.8, 2.5, 64);
-      const rimMat = new THREE.MeshStandardMaterial({
-        color: 0xd8dde6,
-        metalness: 0.95,
-        roughness: 0.15
-      });
+      const rimMat = new THREE.MeshStandardMaterial({ color: 0xd8dde6, metalness: 0.95, roughness: 0.15 });
       const topRim = new THREE.Mesh(rimGeo, rimMat);
       topRim.position.y = platterHeight / 2 - 1.25;
       const botRim = new THREE.Mesh(rimGeo, rimMat);
@@ -792,52 +734,35 @@
       platterMeshGroup.add(topRim);
       platterMeshGroup.add(botRim);
 
-      // 2. 하이파이 무진동 매트 블랙 고무 매트 (Concentric Grooves)
-      const matGeo = new THREE.CylinderGeometry(platterRadius - 3, platterRadius - 3, 3.2, 64);
-      const matMat = new THREE.MeshStandardMaterial({
-        color: 0x141619,
-        roughness: 0.9,
-        metalness: 0.05
-      });
-      const rubberMat = new THREE.Mesh(matGeo, matMat);
+      // 고무 매트
+      const rubberMat = new THREE.Mesh(
+        new THREE.CylinderGeometry(platterRadius - 3, platterRadius - 3, 3.2, 64),
+        new THREE.MeshStandardMaterial({ color: 0x141619, roughness: 0.9, metalness: 0.05 })
+      );
       rubberMat.position.y = platterHeight / 2 + 1.6;
       platterMeshGroup.add(rubberMat);
 
-      // 3. 센터 황동 칼라 링 & 크롬 스핀들 핀
-      const brassCollarGeo = new THREE.CylinderGeometry(11, 11, 4, 32);
-      const brassCollarMat = new THREE.MeshStandardMaterial({
-        color: 0xc9a859, // Brass
-        metalness: 0.88,
-        roughness: 0.2
-      });
-      const brassCollar = new THREE.Mesh(brassCollarGeo, brassCollarMat);
+      // 황동 스핀들
+      const brassCollar = new THREE.Mesh(
+        new THREE.CylinderGeometry(11, 11, 4, 32),
+        new THREE.MeshStandardMaterial({ color: 0xc9a859, metalness: 0.88, roughness: 0.2 })
+      );
       brassCollar.position.y = platterHeight / 2 + 3.5;
       platterMeshGroup.add(brassCollar);
 
-      const spindlePinGeo = new THREE.CylinderGeometry(3.6, 3.6, 20, 32);
-      const spindlePinMat = new THREE.MeshStandardMaterial({
-        color: 0xf1f5f9,
-        metalness: 0.95,
-        roughness: 0.1
-      });
-      const spindlePin = new THREE.Mesh(spindlePinGeo, spindlePinMat);
+      const spindlePin = new THREE.Mesh(
+        new THREE.CylinderGeometry(3.6, 3.6, 20, 32),
+        new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.95, roughness: 0.1 })
+      );
       spindlePin.position.y = platterHeight / 2 + 10;
       platterMeshGroup.add(spindlePin);
 
-      // 4. 12인치 바이닐 LP 음반 (Glossy Vinyl & Label)
-      const vinylGeo = new THREE.CylinderGeometry(144, 144, 2.0, 64);
-
-      // 캔버스로 바이닐 소리골 텍스처 절차적 생성
+      // 바이닐 LP
       const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 1024;
+      canvas.width = 1024; canvas.height = 1024;
       const ctx = canvas.getContext('2d');
-
-      // LP 바탕
       ctx.fillStyle = '#0a0a0c';
       ctx.fillRect(0, 0, 1024, 1024);
-
-      // 미세 소리골 동심원 렌더링
       for (let r = 210; r < 500; r += 1.6) {
         ctx.beginPath();
         ctx.arc(512, 512, r, 0, Math.PI * 2);
@@ -845,130 +770,80 @@
         ctx.lineWidth = 0.8;
         ctx.stroke();
       }
-
-      // 센터 라벨 (하이파이 오디오필 에디션)
       ctx.beginPath();
       ctx.arc(512, 512, 175, 0, Math.PI * 2);
       ctx.fillStyle = '#1e293b';
       ctx.fill();
-      ctx.strokeStyle = '#0284c7';
-      ctx.lineWidth = 6;
-      ctx.stroke();
-
-      // 라벨 텍스트
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = 'bold 36px sans-serif';
-      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 6; ctx.stroke();
+      ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center';
       ctx.fillText('AUDIOPHILE RECORDINGS', 512, 450);
-
-      ctx.fillStyle = '#f8fafc';
-      ctx.font = 'bold 26px sans-serif';
+      ctx.fillStyle = '#f8fafc'; ctx.font = 'bold 26px sans-serif';
       ctx.fillText('33 ⅓ RPM STEREO', 512, 490);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '20px sans-serif';
+      ctx.fillStyle = '#94a3b8'; ctx.font = '20px sans-serif';
       ctx.fillText('SIDE A - PURE ANALOG HI-FI', 512, 570);
+      ctx.beginPath(); ctx.arc(512, 512, 14, 0, Math.PI * 2); ctx.fillStyle = '#000000'; ctx.fill();
 
-      // 센터 홀
-      ctx.beginPath();
-      ctx.arc(512, 512, 14, 0, Math.PI * 2);
-      ctx.fillStyle = '#000000';
-      ctx.fill();
-
-      const vinylTexture = new THREE.CanvasTexture(canvas);
-      const vinylMat = new THREE.MeshStandardMaterial({
-        map: vinylTexture,
-        roughness: 0.18,
-        metalness: 0.35
-      });
-
-      vinylDiscMesh = new THREE.Mesh(vinylGeo, vinylMat);
+      const vinylMat = new THREE.MeshStandardMaterial({ map: new THREE.CanvasTexture(canvas), roughness: 0.18, metalness: 0.35 });
+      vinylDiscMesh = new THREE.Mesh(new THREE.CylinderGeometry(144, 144, 2.0, 64), vinylMat);
       vinylDiscMesh.position.y = platterHeight / 2 + 4.2;
       platterMeshGroup.add(vinylDiscMesh);
 
       layer2_PlatterGroup.add(platterMeshGroup);
 
-      // 5. [벨트 드라이브] 좌상단 노출형 CNC 알루미늄 모터 풀리 및 플랫 러버 벨트
+      // 벨트 드라이브 풀리 & 벨트
       const pulleyPos = { x: -168, y: 24, z: -115 };
-      const pulleyGroup = new THREE.Group();
-      pulleyGroup.position.set(pulleyPos.x, pulleyPos.y, pulleyPos.z);
+      const pulley = new THREE.Mesh(
+        new THREE.CylinderGeometry(8.5, 9.5, 18, 32),
+        new THREE.MeshStandardMaterial({ color: 0xcfd4dc, metalness: 0.95, roughness: 0.15 })
+      );
+      pulley.position.set(pulleyPos.x, pulleyPos.y, pulleyPos.z);
+      pulley.castShadow = true;
+      layer2_PlatterGroup.add(pulley);
 
-      const pulleyGeo = new THREE.CylinderGeometry(8.5, 9.5, 18, 32);
-      const pulleyMat = new THREE.MeshStandardMaterial({
-        color: 0xcfd4dc,
-        metalness: 0.95,
-        roughness: 0.15
-      });
-      const pulleyMesh = new THREE.Mesh(pulleyGeo, pulleyMat);
-      pulleyMesh.castShadow = true;
-      pulleyGroup.add(pulleyMesh);
-      layer2_PlatterGroup.add(pulleyGroup);
-
-      // 벨트 (풀리와 플래터 외주면을 감싸는 플랫 러버 벨트)
-      const beltCurvePoints = [];
-      const steps = 36;
-      // 플래터 외곽 호
+      const beltPoints = [];
       const startAngle = Math.atan2(pulleyPos.z - platterCenter.z, pulleyPos.x - platterCenter.x) + 0.28;
       const endAngle = startAngle + Math.PI * 1.52;
-      for (let i = 0; i <= steps; i++) {
-        const th = startAngle + (endAngle - startAngle) * (i / steps);
-        beltCurvePoints.push(new THREE.Vector3(
-          platterCenter.x + Math.cos(th) * (platterRadius + 1),
-          pulleyPos.y,
-          platterCenter.z + Math.sin(th) * (platterRadius + 1)
-        ));
+      for (let i = 0; i <= 36; i++) {
+        const th = startAngle + (endAngle - startAngle) * (i / 36);
+        beltPoints.push(new THREE.Vector3(platterCenter.x + Math.cos(th) * 147, pulleyPos.y, platterCenter.z + Math.sin(th) * 147));
       }
-      // 풀리 경유
-      beltCurvePoints.push(new THREE.Vector3(pulleyPos.x + 9, pulleyPos.y, pulleyPos.z));
-      beltCurvePoints.push(new THREE.Vector3(pulleyPos.x, pulleyPos.y, pulleyPos.z - 9));
-      beltCurvePoints.push(new THREE.Vector3(pulleyPos.x - 9, pulleyPos.y, pulleyPos.z));
+      beltPoints.push(new THREE.Vector3(pulleyPos.x + 9, pulleyPos.y, pulleyPos.z));
+      beltPoints.push(new THREE.Vector3(pulleyPos.x, pulleyPos.y, pulleyPos.z - 9));
+      beltPoints.push(new THREE.Vector3(pulleyPos.x - 9, pulleyPos.y, pulleyPos.z));
 
-      const beltCurve = new THREE.CatmullRomCurve3(beltCurvePoints, true);
-      const beltGeo = new THREE.TubeGeometry(beltCurve, 80, 1.3, 8, true);
-      const beltMat = new THREE.MeshStandardMaterial({
-        color: 0x171717,
-        roughness: 0.95,
-        metalness: 0.05
-      });
-      const beltMesh = new THREE.Mesh(beltGeo, beltMat);
+      const beltMesh = new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(beltPoints, true), 80, 1.3, 8, true),
+        new THREE.MeshStandardMaterial({ color: 0x171717, roughness: 0.95, metalness: 0.05 })
+      );
       layer2_PlatterGroup.add(beltMesh);
     }
 
     // ==========================================
-    // [LAYER 3] 데크 조작계 (모던 원형 로터리 셀렉터 노브)
+    // [LAYER 3] 데크 조작계 (로터리 노브)
     // ==========================================
     let rotaryKnobGroup = new THREE.Group();
 
     function buildLayer3_DeckControls() {
-      const knobPos = { x: -160, y: 20, z: 108 };
-      rotaryKnobGroup.position.set(knobPos.x, knobPos.y, knobPos.z);
+      rotaryKnobGroup.position.set(-160, 20, 108);
 
-      // 1. 하단 알루미늄 베젤 링 (지름 38mm)
-      const bezelGeo = new THREE.CylinderGeometry(19, 20, 2.5, 32);
-      const bezelMat = new THREE.MeshStandardMaterial({
-        color: 0x334155,
-        metalness: 0.85,
-        roughness: 0.2
-      });
-      const bezel = new THREE.Mesh(bezelGeo, bezelMat);
+      const bezel = new THREE.Mesh(
+        new THREE.CylinderGeometry(19, 20, 2.5, 32),
+        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.2 })
+      );
       rotaryKnobGroup.add(bezel);
 
-      // 2. 알루미늄 로터리 다이얼 본체 (널링 그립 엣지)
-      const knobGeo = new THREE.CylinderGeometry(16, 16, 13, 32);
-      const knobMat = new THREE.MeshStandardMaterial({
-        color: 0xd8dde4,
-        metalness: 0.92,
-        roughness: 0.25
-      });
-      const knob = new THREE.Mesh(knobGeo, knobMat);
+      const knob = new THREE.Mesh(
+        new THREE.CylinderGeometry(16, 16, 13, 32),
+        new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.92, roughness: 0.25 })
+      );
       knob.position.y = 6.5;
       knob.castShadow = true;
       rotaryKnobGroup.add(knob);
 
-      // 3. 인디케이터 인덱스 마크 홈 (상단 선형 음각)
-      const markGeo = new THREE.BoxGeometry(2, 0.8, 12);
-      const markMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
-      const mark = new THREE.Mesh(markGeo, markMat);
+      const mark = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 0.8, 12),
+        new THREE.MeshBasicMaterial({ color: 0x0f172a })
+      );
       mark.position.set(0, 13.1, -4);
       rotaryKnobGroup.add(mark);
 
@@ -976,7 +851,7 @@
     }
 
     // ==========================================
-    // [LAYER 4] 톤암 어셈블리 (피봇, S자 블랙 파이프, 카운터웨이트, 큐잉)
+    // [LAYER 4] 톤암 어셈블리 (실물 S-Curve 정밀 튜너 연동)
     // ==========================================
     const tonearmBasePos = { x: 135, y: 20, z: -78 };
     let tonearmBaseAssembly = new THREE.Group();
@@ -984,182 +859,228 @@
     let tonearmHorizontalArm = new THREE.Group();
     let tonearmVerticalGimbal = new THREE.Group();
     let cueingLeverMesh = null;
+    let restPillarGroup = new THREE.Group();
+    let restCradleMesh = null;
+
+    // 현재 톤암 지오메트리 파라미터 (기본값: 데논 DP-400 딥 S-Curve)
+    let tonearmParams = {
+      rightApex: 30.0,       // 1차 우측 휨 폭 (+X mm)
+      leftAngleDeg: -23.5,   // 2차 좌측 꺾임 오프셋 각도 (도)
+      thickness: 4.0,        // 파이프 외경 두께 (mm)
+      elevation: 2.5,        // 상하 3차원 굴곡 깊이 (mm)
+      colorHex: 0x111317,    // 새틴 블랙
+      roughness: 0.24,
+      metalness: 0.78
+    };
+
+    let tonearmPipeMesh = null;
+    let bayonetCollarMesh = null;
+    let headshellGroup = new THREE.Group();
+    let currentCartridgeMesh = null;
 
     function buildLayer4_TonearmAssembly() {
       tonearmBaseAssembly.position.set(tonearmBasePos.x, tonearmBasePos.y, tonearmBasePos.z);
 
-      // 1. 원형 다크 아노다이징 베이스 마운팅 칼라
-      const basePlateGeo = new THREE.CylinderGeometry(42, 44, 7, 36);
-      const basePlateMat = new THREE.MeshStandardMaterial({
-        color: 0x1e2229,
-        metalness: 0.85,
-        roughness: 0.25
-      });
-      const basePlate = new THREE.Mesh(basePlateGeo, basePlateMat);
+      // 1. 대형 마운팅 베이스 칼라
+      const basePlate = new THREE.Mesh(
+        new THREE.CylinderGeometry(44, 46, 7.5, 36),
+        new THREE.MeshStandardMaterial({ color: 0x1b1e24, metalness: 0.85, roughness: 0.25 })
+      );
       basePlate.castShadow = true;
       tonearmBaseAssembly.add(basePlate);
 
-      // 2. 안티스케이팅 다이얼 (우측 브래킷)
-      const antiSkateKnob = new THREE.Mesh(
-        new THREE.CylinderGeometry(7.5, 7.5, 7, 24),
-        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 })
+      // 2. 안티스케이팅 정밀 다이얼 (우측)
+      const antiSkate = new THREE.Mesh(
+        new THREE.CylinderGeometry(8, 8, 8, 24),
+        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.25 })
       );
-      antiSkateKnob.position.set(28, 7, -8);
-      tonearmBaseAssembly.add(antiSkateKnob);
+      antiSkate.position.set(30, 7.5, -8);
+      tonearmBaseAssembly.add(antiSkate);
 
-      // 3. 큐잉 리프트 플랫폼 & 댐퍼 실린더
-      const liftBarGeo = new THREE.BoxGeometry(28, 3.5, 5);
-      const liftBarMat = new THREE.MeshStandardMaterial({ color: 0x22262e, roughness: 0.8 });
-      const liftBar = new THREE.Mesh(liftBarGeo, liftBarMat);
-      liftBar.position.set(-16, 12, 14);
+      // 3. 큐잉 리프트 플랫폼 & 레버
+      const liftBar = new THREE.Mesh(
+        new THREE.BoxGeometry(32, 4, 6),
+        new THREE.MeshStandardMaterial({ color: 0x22262e, roughness: 0.8 })
+      );
+      liftBar.position.set(tonearmParams.rightApex * 0.5 - 2, 12.5, 32);
       tonearmBaseAssembly.add(liftBar);
 
-      // 큐잉 수동 조작 레버
-      const cueLeverGeo = new THREE.CylinderGeometry(1.2, 1.2, 22, 16);
-      const cueLeverMat = new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.9, roughness: 0.15 });
-      cueingLeverMesh = new THREE.Mesh(cueLeverGeo, cueLeverMat);
-      cueingLeverMesh.position.set(-28, 14, 18);
+      cueingLeverMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.3, 1.3, 24, 16),
+        new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.9, roughness: 0.15 })
+      );
+      cueingLeverMesh.position.set(16, 14, 26);
       cueingLeverMesh.rotation.x = 0.35;
       tonearmBaseAssembly.add(cueingLeverMesh);
 
-      // 4. 안전 암레스트 지지대 (Armrest Pillar & Clip)
+      // 4. 안전 암레스트 지지대 (파이프 휨 위치에 정밀 결합)
+      tonearmBaseAssembly.add(restPillarGroup);
+
+      // 5. 짐벌 요크 코어 (정밀 링 & 베어링)
+      tonearmPivotCore.position.set(0, 18, 0);
+      tonearmBaseAssembly.add(tonearmPivotCore);
+
+      const gimbalHousing = new THREE.Mesh(
+        new THREE.CylinderGeometry(14, 14, 16, 32),
+        new THREE.MeshStandardMaterial({ color: 0x14161a, metalness: 0.85, roughness: 0.22 })
+      );
+      gimbalHousing.rotation.x = Math.PI / 2;
+      tonearmPivotCore.add(gimbalHousing);
+
+      tonearmPivotCore.add(tonearmHorizontalArm);
+      tonearmHorizontalArm.add(tonearmVerticalGimbal);
+
+      // 6. 후방 카운터웨이트 어셈블리
+      const rearStub = new THREE.Mesh(
+        new THREE.CylinderGeometry(5.0, 5.0, 46, 24),
+        new THREE.MeshStandardMaterial({ color: 0x181a20, metalness: 0.8, roughness: 0.3 })
+      );
+      rearStub.rotation.x = Math.PI / 2;
+      rearStub.position.z = -23;
+      tonearmVerticalGimbal.add(rearStub);
+
+      const counterWeightBody = new THREE.Mesh(
+        new THREE.CylinderGeometry(16.5, 16.5, 22, 32),
+        new THREE.MeshStandardMaterial({ color: 0x14161a, metalness: 0.78, roughness: 0.26 })
+      );
+      counterWeightBody.rotation.x = Math.PI / 2;
+      counterWeightBody.position.z = -30;
+      tonearmVerticalGimbal.add(counterWeightBody);
+
+      const scaleRing = new THREE.Mesh(
+        new THREE.CylinderGeometry(16.8, 16.8, 6, 32),
+        new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.85, roughness: 0.2 })
+      );
+      scaleRing.rotation.x = Math.PI / 2;
+      scaleRing.position.z = -18;
+      tonearmVerticalGimbal.add(scaleRing);
+
+      // 7. 베이어넷 고정 칼라 & 헤드셀 그룹 등록
+      bayonetCollarMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(5.2, 5.2, 8, 24),
+        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.9, roughness: 0.2 })
+      );
+      bayonetCollarMesh.rotation.x = Math.PI / 2;
+      tonearmVerticalGimbal.add(bayonetCollarMesh);
+      tonearmVerticalGimbal.add(headshellGroup);
+
+      // 8. 파이프 생성 및 헤드셀 결합
+      buildHeadshellBase();
+      rebuildTonearmGeometry();
+
+      layer4_TonearmGroup.add(tonearmBaseAssembly);
+    }
+
+    // ==========================================
+    // 톤암 파이프 실시간 동적 재구축 엔진
+    // ==========================================
+    function rebuildTonearmGeometry() {
+      const { rightApex, leftAngleDeg, thickness, elevation, colorHex, roughness, metalness } = tonearmParams;
+
+      // 기존 파이프 메시 제거
+      if (tonearmPipeMesh) {
+        tonearmVerticalGimbal.remove(tonearmPipeMesh);
+        if (tonearmPipeMesh.geometry) tonearmPipeMesh.geometry.dispose();
+      }
+
+      // 실물 다이어그램 및 데논 실물 1:1 기반 스플라인 제어점 계산
+      const leftAngleRad = (leftAngleDeg * Math.PI) / 180;
+      const slope = Math.tan(leftAngleRad); // 음수 (좌측 꺾임)
+      const p6 = new THREE.Vector3(rightApex * 0.18, -elevation * 0.5, 198.0);
+      const dz = 18.4;
+      const dx = slope * dz;
+      const p7 = new THREE.Vector3(p6.x + dx, -elevation * 0.8, 198.0 + dz);
+
+      const sPipePoints = [
+        new THREE.Vector3(0, 0, 0),                                      // 피봇 원점
+        new THREE.Vector3(rightApex * 0.10, elevation * 0.2, 16.0),       // 짐벌 탈출
+        new THREE.Vector3(rightApex * 0.65, elevation * 0.6, 42.0),       // 1차 우측 휨 스윙
+        new THREE.Vector3(rightApex, elevation * 0.3, 75.0),              // [1차 우측 휨 정점(Apex)]
+        new THREE.Vector3(rightApex * 0.95, 0, 125.0),                    // 중앙 하강 스윕
+        new THREE.Vector3(rightApex * 0.65, -elevation * 0.2, 168.0),     // 2차 좌측 꺾임 시작
+        p6,                                                              // 2차 좌측 꺾임 가속
+        p7                                                               // 헤드셀 결합 지점
+      ];
+
+      const tonearmCurve = new THREE.CatmullRomCurve3(sPipePoints);
+      const tonearmPipeGeo = new THREE.TubeGeometry(tonearmCurve, 80, thickness / 2, 24, false);
+      const tonearmPipeMat = new THREE.MeshStandardMaterial({
+        color: colorHex,
+        metalness: metalness,
+        roughness: roughness
+      });
+
+      tonearmPipeMesh = new THREE.Mesh(tonearmPipeGeo, tonearmPipeMat);
+      tonearmPipeMesh.castShadow = true;
+      tonearmVerticalGimbal.add(tonearmPipeMesh);
+
+      // 베이어넷 칼라 위치 및 회전 갱신
+      bayonetCollarMesh.position.copy(p7);
+      bayonetCollarMesh.rotation.y = leftAngleRad;
+
+      // 헤드셀 위치 및 오프셋 각도 갱신
+      headshellGroup.position.copy(p7);
+      headshellGroup.rotation.y = leftAngleRad;
+
+      // 암레스트 지지대 위치 갱신 (파이프 정점 Z=75 지점에 정밀 결합)
+      updateArmrestPosition(rightApex);
+
+      // UI 수치 갱신
+      document.getElementById('val-right-apex').textContent = `${rightApex > 0 ? '+' : ''}${rightApex.toFixed(1)} mm`;
+      document.getElementById('val-left-angle').textContent = `${leftAngleDeg.toFixed(1)} °`;
+      document.getElementById('val-elevation').textContent = `${elevation.toFixed(1)} mm`;
+      document.getElementById('val-thickness').textContent = `${thickness.toFixed(1)} mm`;
+    }
+
+    function updateArmrestPosition(apexX) {
+      restPillarGroup.clear();
+      const restZ = 75;
+      const restX = apexX;
+
       const restPillar = new THREE.Mesh(
         new THREE.CylinderGeometry(3.5, 3.5, 20, 16),
         new THREE.MeshStandardMaterial({ color: 0x1f2328, metalness: 0.7, roughness: 0.3 })
       );
-      restPillar.position.set(-24, 10, 88);
+      restPillar.position.set(restX, 10, restZ);
+
       const restCradle = new THREE.Mesh(
         new THREE.BoxGeometry(14, 5, 8),
         new THREE.MeshStandardMaterial({ color: 0x111317, roughness: 0.85 })
       );
-      restCradle.position.set(-24, 20, 88);
-      tonearmBaseAssembly.add(restPillar);
-      tonearmBaseAssembly.add(restCradle);
+      restCradle.position.set(restX, 19.5, restZ);
 
-      // 5. 짐벌 요크 링 마운트 (수평/수직 베어링 코어)
-      tonearmPivotCore.position.set(0, 18, 0); // 피봇 중심
-      tonearmBaseAssembly.add(tonearmPivotCore);
-
-      const gimbalRingGeo = new THREE.TorusGeometry(13, 2.5, 16, 32);
-      const gimbalRingMat = new THREE.MeshStandardMaterial({
-        color: 0x181a20,
-        metalness: 0.85,
-        roughness: 0.22
-      });
-      const gimbalRing = new THREE.Mesh(gimbalRingGeo, gimbalRingMat);
-      gimbalRing.rotation.y = Math.PI / 2;
-      tonearmPivotCore.add(gimbalRing);
-
-      // 수평 회전 축 (Horizontal Arm Group)
-      tonearmPivotCore.add(tonearmHorizontalArm);
-      // 수직 틸트 축 (Vertical Gimbal Group)
-      tonearmHorizontalArm.add(tonearmVerticalGimbal);
-
-      // 6. 후방 스터브 & 카운터웨이트 (무게추)
-      const rearStub = new THREE.Mesh(
-        new THREE.CylinderGeometry(4.5, 4.5, 42, 24),
-        new THREE.MeshStandardMaterial({ color: 0x181a20, metalness: 0.8, roughness: 0.3 })
-      );
-      rearStub.rotation.x = Math.PI / 2;
-      rearStub.position.z = -21;
-      tonearmVerticalGimbal.add(rearStub);
-
-      // 카운터웨이트 본체 (원통형 매트 블랙)
-      const counterWeightBody = new THREE.Mesh(
-        new THREE.CylinderGeometry(15, 15, 20, 32),
-        new THREE.MeshStandardMaterial({ color: 0x14161a, metalness: 0.75, roughness: 0.28 })
-      );
-      counterWeightBody.rotation.x = Math.PI / 2;
-      counterWeightBody.position.z = -28;
-      tonearmVerticalGimbal.add(counterWeightBody);
-
-      // 전면 침압 눈금 링 (0 ~ 4.0g 스케일)
-      const scaleRing = new THREE.Mesh(
-        new THREE.CylinderGeometry(15.2, 15.2, 5, 32),
-        new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.85, roughness: 0.2 })
-      );
-      scaleRing.rotation.x = Math.PI / 2;
-      scaleRing.position.z = -17;
-      tonearmVerticalGimbal.add(scaleRing);
-
-      // 7. [사용자 특별 지침 1:1 완벽 구현] 3차원 블랙 S-Curve 톤암 파이프
-      // "무게 추에서 암이 나와서 무게추가 위에 있는 기준을 오른쪽으로 휜 다음 내려와서 왼쪽으로 휘는 구조"
-      const sPipePoints = [
-        new THREE.Vector3(0, 0, 0),        // 피봇 출발점
-        new THREE.Vector3(2.5, 0, 20),      // 전방 직진 탈출
-        new THREE.Vector3(16.5, 0, 56),     // [1차 우측 휨 +X]
-        new THREE.Vector3(16.0, 0, 118),    // [하강 직진 구간]
-        new THREE.Vector3(7.0, 0, 165),     // [2차 좌측 휨 시작 -X]
-        new THREE.Vector3(-8.5, 0, 198),    // [2차 좌측 휨 완료 -X]
-        new THREE.Vector3(-15.5, 0, 214)    // 헤드셀 결합 조인트
-      ];
-
-      const tonearmCurve = new THREE.CatmullRomCurve3(sPipePoints);
-      const tonearmPipeGeo = new THREE.TubeGeometry(tonearmCurve, 64, 3.8, 20, false);
-      const tonearmPipeMat = new THREE.MeshStandardMaterial({
-        color: 0x111317, // 딥 매트 블랙
-        metalness: 0.78,
-        roughness: 0.24
-      });
-      const tonearmPipeMesh = new THREE.Mesh(tonearmPipeGeo, tonearmPipeMat);
-      tonearmPipeMesh.castShadow = true;
-      tonearmVerticalGimbal.add(tonearmPipeMesh);
-
-      // 베이어넷 고정 칼라 (헤드셀 탈착 락 너트)
-      const bayonetCollar = new THREE.Mesh(
-        new THREE.CylinderGeometry(5.2, 5.2, 8, 24),
-        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.9, roughness: 0.2 })
-      );
-      bayonetCollar.rotation.x = Math.PI / 2;
-      bayonetCollar.position.set(-15.5, 0, 214);
-      tonearmVerticalGimbal.add(bayonetCollar);
-
-      layer4_TonearmGroup.add(tonearmBaseAssembly);
-
-      // 레이어 5(헤드셀 & 카트리지)를 톤암 파이프 끝에 부착
-      buildLayer5_HeadshellAndCartridges(tonearmVerticalGimbal);
+      restPillarGroup.add(restPillar);
+      restPillarGroup.add(restCradle);
     }
 
     // ==========================================
-    // [LAYER 5] 모던 경량 헤드셀 & 6종 카트리지 핫스왑
+    // [LAYER 5] 모던 경량 헤드셀 & 6종 카트리지
     // ==========================================
-    let currentCartridgeMesh = null;
-    let headshellGroup = new THREE.Group();
+    function buildHeadshellBase() {
+      headshellGroup.clear();
 
-    function buildLayer5_HeadshellAndCartridges(parentGimbal) {
-      headshellGroup.position.set(-15.5, 0, 218);
-      // 오프셋 각도 약 -23.5도 (소리골 접선 정합)
-      headshellGroup.rotation.y = -0.41;
-
-      // 1. 모던 테이퍼드 경량 헤드셀 (AT-HS4 스타일)
+      // 경량 헤드셀 바디
       const shellGeo = new THREE.BoxGeometry(19, 5, 42);
-      const shellMat = new THREE.MeshStandardMaterial({
-        color: 0x15181e,
-        metalness: 0.8,
-        roughness: 0.25
-      });
+      const shellMat = new THREE.MeshStandardMaterial({ color: 0x15181e, metalness: 0.8, roughness: 0.25 });
       const shellMesh = new THREE.Mesh(shellGeo, shellMat);
       shellMesh.position.set(0, 0.5, 21);
       shellMesh.castShadow = true;
       headshellGroup.add(shellMesh);
 
-      // 2. 우측 곡선형 인체공학적 핑거 리프트 (Finger Lift)
+      // 우측 핑거 리프트
       const liftCurve = new THREE.CatmullRomCurve3([
         new THREE.Vector3(9.5, 1, 24),
         new THREE.Vector3(18, 5, 27),
         new THREE.Vector3(26, 12, 33),
         new THREE.Vector3(29, 14, 38)
       ]);
-      const fingerLiftGeo = new THREE.TubeGeometry(liftCurve, 20, 1.2, 10, false);
-      const fingerLiftMat = new THREE.MeshStandardMaterial({
-        color: 0x181a20,
-        metalness: 0.85,
-        roughness: 0.2
-      });
-      const fingerLift = new THREE.Mesh(fingerLiftGeo, fingerLiftMat);
+      const fingerLift = new THREE.Mesh(
+        new THREE.TubeGeometry(liftCurve, 20, 1.2, 10, false),
+        new THREE.MeshStandardMaterial({ color: 0x181a20, metalness: 0.85, roughness: 0.2 })
+      );
       headshellGroup.add(fingerLift);
 
-      // 3. 상단 마운팅 슬롯 및 스테인리스 볼트 2개
+      // 상단 볼트 2개
       const boltMat = new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.95, roughness: 0.15 });
       const boltL = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 3, 16), boltMat);
       boltL.position.set(-5, 3.5, 24);
@@ -1168,121 +1089,106 @@
       headshellGroup.add(boltL);
       headshellGroup.add(boltR);
 
-      // 4. OFC 리드 와이어 4가닥 (적, 녹, 백, 청)
+      // 4가닥 리드 와이어
       const wireColors = [0xef4444, 0x10b981, 0xffffff, 0x3b82f6];
-      const wireOffsets = [-3.5, -1.2, 1.2, 3.5];
-      wireOffsets.forEach((ox, idx) => {
-        const wireGeo = new THREE.CylinderGeometry(0.5, 0.5, 10, 8);
-        const wireMat = new THREE.MeshBasicMaterial({ color: wireColors[idx] });
-        const wire = new THREE.Mesh(wireGeo, wireMat);
+      [-3.5, -1.2, 1.2, 3.5].forEach((ox, idx) => {
+        const wire = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.5, 0.5, 10, 8),
+          new THREE.MeshBasicMaterial({ color: wireColors[idx] })
+        );
         wire.rotation.x = Math.PI / 2;
         wire.position.set(ox, -0.5, 3);
         headshellGroup.add(wire);
       });
 
-      parentGimbal.add(headshellGroup);
-
-      // 카트리지 첫 번째 프리셋 장착
       swapCartridge(0);
     }
 
-    // 6종 카트리지 실시간 3D 핫스왑 생성 함수
     function swapCartridge(index) {
       currentCartridgeIndex = index;
       const data = CARTRIDGES[index];
 
-      if (currentCartridgeMesh) {
-        headshellGroup.remove(currentCartridgeMesh);
-      }
+      if (currentCartridgeMesh) headshellGroup.remove(currentCartridgeMesh);
 
       currentCartridgeMesh = new THREE.Group();
       currentCartridgeMesh.position.set(0, -6, 25);
 
-      // 메인 바디 형상
-      const bodyGeo = new THREE.BoxGeometry(17, 8, 22);
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: data.color,
-        metalness: 0.4,
-        roughness: 0.3
-      });
-      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      const body = new THREE.Mesh(
+        new THREE.BoxGeometry(17, 8, 22),
+        new THREE.MeshStandardMaterial({ color: data.color, metalness: 0.4, roughness: 0.3 })
+      );
       body.castShadow = true;
       currentCartridgeMesh.add(body);
 
-      // 스타일러스 캔틸레버 & 다이아몬드 바늘 팁
-      const cantileverGeo = new THREE.CylinderGeometry(0.4, 0.4, 6.5, 10);
-      const cantileverMat = new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.95, roughness: 0.1 });
-      const cantilever = new THREE.Mesh(cantileverGeo, cantileverMat);
+      const cantilever = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.4, 0.4, 6.5, 10),
+        new THREE.MeshStandardMaterial({ color: 0xd8dde4, metalness: 0.95, roughness: 0.1 })
+      );
       cantilever.position.set(0, -5, 6);
       cantilever.rotation.x = 0.45;
       currentCartridgeMesh.add(cantilever);
 
-      // 초소형 다이아몬드 바늘 끝 (Stylus Diamond Tip)
-      const diamondTipGeo = new THREE.ConeGeometry(0.5, 1.2, 8);
-      const diamondTipMat = new THREE.MeshBasicMaterial({ color: 0x5eead4 });
-      const diamondTip = new THREE.Mesh(diamondTipGeo, diamondTipMat);
+      const diamondTip = new THREE.Mesh(
+        new THREE.ConeGeometry(0.5, 1.2, 8),
+        new THREE.MeshBasicMaterial({ color: 0x5eead4 })
+      );
       diamondTip.position.set(0, -7.2, 8.5);
       diamondTip.rotation.x = Math.PI;
       currentCartridgeMesh.add(diamondTip);
 
-      // Shure M75ED 전용: 플립다운 다이내믹 가드
       if (data.id === 'm75ed') {
-        const guardGeo = new THREE.BoxGeometry(18, 2, 6);
-        const guardMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.4 });
-        const guard = new THREE.Mesh(guardGeo, guardMat);
+        const guard = new THREE.Mesh(
+          new THREE.BoxGeometry(18, 2, 6),
+          new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.4 })
+        );
         guard.position.set(0, -4, 11);
         currentCartridgeMesh.add(guard);
       }
 
       headshellGroup.add(currentCartridgeMesh);
-
-      // UI 정보 갱신
-      updateCartridgeUI(data);
+      document.getElementById('detail-name-mini').textContent = `${data.name} (${data.vtf}g)`;
+      document.getElementById('stat-vtf').textContent = `${data.vtf} g`;
     }
 
     // ==========================================
-    // 물리 엔진 & 애니메이션 상태 제어 변수
+    // 물리 엔진 & 애니메이션 상태 제어
     // ==========================================
     let isPlatterSpinning = false;
     let targetRpm = 33.333;
-    let currentPlatterSpeed = 0; // rad/s
+    let currentPlatterSpeed = 0;
     let platterRotationAngle = 0;
 
-    let isArmCueUp = false; // true: 리프트 상승, false: 레코드 착지
-    let cueProgress = 0; // 0: 착지, 1: 완전 상승
+    let isArmCueUp = false;
+    let cueProgress = 0;
 
-    let armState = 'REST'; // 'REST', 'TRACKING', 'MANUAL'
-    let currentArmAngle = 0; // 라디안
-    const ARM_ANGLE_REST = 0.0;       // 암레스트 안착 각도
-    const ARM_ANGLE_LEAD_IN = 0.418;  // 음반 첫 트랙 소리골 각도
-    const ARM_ANGLE_LEAD_OUT = 0.582; // 음반 마지막 안쪽 소리골 각도
+    let armState = 'REST';
+    let currentArmAngle = 0;
+    const ARM_ANGLE_REST = 0.0;
+    const ARM_ANGLE_LEAD_IN = 0.418;
+    const ARM_ANGLE_LEAD_OUT = 0.582;
 
-    // 5대 레이어 분해 보기 상태
     let isExploded = false;
     let explodeProgress = 0;
 
-    // 카메라 전환 애니메이션
-    let targetCamPos = new THREE.Vector3(260, 240, 290);
-    let targetCamLook = new THREE.Vector3(0, 0, 0);
+    let targetCamPos = new THREE.Vector3(190, 140, 80); // 기본 톤암뷰로 시작
+    let targetCamLook = new THREE.Vector3(120, 25, 20);
 
     const CAMERA_PRESETS = {
+      tonearm: { pos: new THREE.Vector3(190, 140, 80), look: new THREE.Vector3(120, 25, 20) },
       quarter: { pos: new THREE.Vector3(260, 240, 290), look: new THREE.Vector3(0, 0, 0) },
       top: { pos: new THREE.Vector3(0, 480, 0.01), look: new THREE.Vector3(0, 0, 0) },
       front: { pos: new THREE.Vector3(0, 75, 420), look: new THREE.Vector3(0, 15, 0) },
-      tonearm: { pos: new THREE.Vector3(180, 140, 90), look: new THREE.Vector3(120, 25, 20) },
       stylus: { pos: new THREE.Vector3(25, 45, 155), look: new THREE.Vector3(-15, 28, 125) }
     };
 
-    // ==========================================
-    // 빌드 실행 및 초기화
-    // ==========================================
+    // 빌드 실행
     buildLayer1_Plinth();
     buildLayer2_PlatterAndBelt();
     buildLayer3_DeckControls();
     buildLayer4_TonearmAssembly();
 
-    camera.position.copy(CAMERA_PRESETS.quarter.pos);
-    controls.target.copy(CAMERA_PRESETS.quarter.look);
+    camera.position.copy(CAMERA_PRESETS.tonearm.pos);
+    controls.target.copy(CAMERA_PRESETS.tonearm.look);
 
     // ==========================================
     // UI 이벤트 리스너 바인딩
@@ -1292,28 +1198,103 @@
       const listContainer = document.getElementById('cartridge-list');
       listContainer.innerHTML = '';
       CARTRIDGES.forEach((cart, idx) => {
-        const item = document.createElement('div');
-        item.className = `p-2 rounded-xl glass-panel-sub flex items-center justify-between cursor-pointer transition-all border ${
-          idx === currentCartridgeIndex ? 'border-teal-400 bg-teal-950/30' : 'hover:border-white/20'
+        const btn = document.createElement('button');
+        btn.className = `p-1.5 rounded-lg glass-panel-sub text-[10px] font-bold flex items-center justify-center gap-1.5 border transition-all ${
+          idx === currentCartridgeIndex ? 'border-teal-400 bg-teal-950/40 text-teal-300' : 'text-zinc-300 hover:border-white/20'
         }`;
-        item.innerHTML = `
-          <div class="flex items-center gap-2.5">
-            <div class="w-3.5 h-3.5 rounded-full shadow-md" style="background-color: ${cart.accentColor};"></div>
-            <div>
-              <div class="text-xs font-bold text-zinc-100">${cart.name}</div>
-              <div class="text-[10px] text-zinc-400">${cart.brand} · ${cart.type}</div>
-            </div>
-          </div>
-          <span class="text-[10px] font-mono text-zinc-300 font-semibold">${cart.vtf}g</span>
-        `;
-        item.addEventListener('click', () => {
+        btn.innerHTML = `<span class="w-2.5 h-2.5 rounded-full" style="background-color: ${cart.accentColor};"></span><span>${cart.name}</span>`;
+        btn.addEventListener('click', () => {
           swapCartridge(idx);
           initUI();
         });
-        listContainer.appendChild(item);
+        listContainer.appendChild(btn);
       });
 
-      // 2. 5대 레이어 체크박스 토글
+      // 2. 톤암 튜너 패널 토글 & 닫기
+      const tunerPanel = document.getElementById('panel-tonearm-tuner');
+      document.getElementById('btn-toggle-tuner').addEventListener('click', () => {
+        tunerPanel.classList.toggle('hidden');
+      });
+      document.getElementById('btn-close-tuner').addEventListener('click', () => {
+        tunerPanel.classList.add('hidden');
+      });
+
+      // 3. 4대 실물 프리셋 버튼 바인딩
+      const presets = [
+        { id: 'preset-denon', apex: 30.0, angle: -23.5, thick: 4.0, elev: 2.5 },
+        { id: 'preset-diagram', apex: 26.5, angle: -23.5, thick: 3.8, elev: 1.0 },
+        { id: 'preset-technics', apex: 20.0, angle: -21.0, thick: 3.8, elev: 1.5 },
+        { id: 'preset-at', apex: 6.0, angle: -24.0, thick: 4.0, elev: 0.5 }
+      ];
+
+      presets.forEach(({ id, apex, angle, thick, elev }) => {
+        document.getElementById(id).addEventListener('click', () => {
+          tonearmParams.rightApex = apex;
+          tonearmParams.leftAngleDeg = angle;
+          tonearmParams.thickness = thick;
+          tonearmParams.elevation = elev;
+
+          document.getElementById('slider-right-apex').value = apex;
+          document.getElementById('slider-left-angle').value = angle;
+          document.getElementById('slider-thickness').value = thick;
+          document.getElementById('slider-elevation').value = elev;
+
+          rebuildTonearmGeometry();
+
+          // 버튼 하이라이트 갱신
+          presets.forEach(p => {
+            const el = document.getElementById(p.id);
+            if (p.id === id) {
+              el.className = 'px-2 py-1.5 rounded-lg glass-btn-active font-semibold text-left flex items-center justify-between';
+              el.innerHTML = `<span>${el.textContent.trim()}</span><i data-lucide="check" class="w-3 h-3 text-teal-400"></i>`;
+            } else {
+              el.className = 'px-2 py-1.5 rounded-lg glass-btn text-zinc-300 font-semibold text-left flex items-center justify-between hover:text-white';
+              el.innerHTML = `<span>${el.textContent.trim()}</span>`;
+            }
+          });
+          lucide.createIcons();
+        });
+      });
+
+      // 4. 슬라이더 실시간 바인딩
+      document.getElementById('slider-right-apex').addEventListener('input', (e) => {
+        tonearmParams.rightApex = parseFloat(e.target.value);
+        rebuildTonearmGeometry();
+      });
+      document.getElementById('slider-left-angle').addEventListener('input', (e) => {
+        tonearmParams.leftAngleDeg = parseFloat(e.target.value);
+        rebuildTonearmGeometry();
+      });
+      document.getElementById('slider-elevation').addEventListener('input', (e) => {
+        tonearmParams.elevation = parseFloat(e.target.value);
+        rebuildTonearmGeometry();
+      });
+      document.getElementById('slider-thickness').addEventListener('input', (e) => {
+        tonearmParams.thickness = parseFloat(e.target.value);
+        rebuildTonearmGeometry();
+      });
+
+      // 5. 파이프 색상 버튼
+      const colors = [
+        { id: 'color-black', hex: 0x111317, rough: 0.24, metal: 0.78 },
+        { id: 'color-gunmetal', hex: 0x2a2e36, rough: 0.28, metal: 0.88 },
+        { id: 'color-silver', hex: 0xd8dde4, rough: 0.15, metal: 0.95 }
+      ];
+      colors.forEach(c => {
+        document.getElementById(c.id).addEventListener('click', () => {
+          tonearmParams.colorHex = c.hex;
+          tonearmParams.roughness = c.rough;
+          tonearmParams.metalness = c.metal;
+          rebuildTonearmGeometry();
+          colors.forEach(other => {
+            const btn = document.getElementById(other.id);
+            if (other.id === c.id) btn.className = 'py-1 rounded-lg glass-btn-active font-semibold';
+            else btn.className = 'py-1 rounded-lg glass-btn text-zinc-300 hover:text-white font-semibold';
+          });
+        });
+      });
+
+      // 6. 5대 레이어 토글
       const layerCheckboxes = [
         { id: 'layer-plinth', group: layer1_PlinthGroup },
         { id: 'layer-platter', group: layer2_PlatterGroup },
@@ -1321,70 +1302,40 @@
         { id: 'layer-tonearm', group: layer4_TonearmGroup },
         { id: 'layer-cartridge', group: layer5_CartridgeGroup }
       ];
-
       layerCheckboxes.forEach(({ id, group }) => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.addEventListener('change', (e) => {
-            group.visible = e.target.checked;
-          });
-        }
+        document.getElementById(id).addEventListener('change', (e) => group.visible = e.target.checked);
       });
-
       document.getElementById('btn-toggle-all-layers').addEventListener('click', () => {
         layerCheckboxes.forEach(({ id, group }) => {
-          const el = document.getElementById(id);
-          el.checked = true;
+          document.getElementById(id).checked = true;
           group.visible = true;
         });
       });
 
-      // 3. 플래터 회전 토글 버튼
-      const btnPlatter = document.getElementById('btn-platter-toggle');
-      btnPlatter.addEventListener('click', () => {
+      // 7. 플래터 회전 & 속도 컨트롤
+      document.getElementById('btn-platter-toggle').addEventListener('click', () => {
         audio.init();
         isPlatterSpinning = !isPlatterSpinning;
         updatePlatterControls();
       });
-
-      // 4. 속도 셀렉터 (33 / STOP / 45)
-      const btn33 = document.getElementById('btn-speed-33');
-      const btnStop = document.getElementById('btn-speed-stop');
-      const btn45 = document.getElementById('btn-speed-45');
-
-      btn33.addEventListener('click', () => {
-        audio.init();
-        targetRpm = 33.333;
-        isPlatterSpinning = true;
-        updatePlatterControls();
+      document.getElementById('btn-speed-33').addEventListener('click', () => {
+        audio.init(); targetRpm = 33.333; isPlatterSpinning = true; updatePlatterControls();
+      });
+      document.getElementById('btn-speed-stop').addEventListener('click', () => {
+        isPlatterSpinning = false; updatePlatterControls();
+      });
+      document.getElementById('btn-speed-45').addEventListener('click', () => {
+        audio.init(); targetRpm = 45.0; isPlatterSpinning = true; updatePlatterControls();
       });
 
-      btnStop.addEventListener('click', () => {
-        isPlatterSpinning = false;
-        updatePlatterControls();
-      });
-
-      btn45.addEventListener('click', () => {
-        audio.init();
-        targetRpm = 45.0;
-        isPlatterSpinning = true;
-        updatePlatterControls();
-      });
-
-      // 5. 큐잉 레버 (LIFT / DOWN)
-      const btnCue = document.getElementById('btn-cue-lever');
-      btnCue.addEventListener('click', () => {
+      // 8. 큐잉 레버 & 착지 & 복귀
+      document.getElementById('btn-cue-lever').addEventListener('click', () => {
         audio.init();
         isArmCueUp = !isArmCueUp;
-        if (!isArmCueUp && armState === 'TRACKING') {
-          audio.playNeedleDropThump();
-        }
+        if (!isArmCueUp && armState === 'TRACKING') audio.playNeedleDropThump();
         updateCueUI();
       });
-
-      // 6. 소리골 자동 착지 (Auto Lead-in)
-      const btnAutoPlay = document.getElementById('btn-auto-play');
-      btnAutoPlay.addEventListener('click', () => {
+      document.getElementById('btn-auto-play').addEventListener('click', () => {
         audio.init();
         isPlatterSpinning = true;
         armState = 'TRACKING';
@@ -1394,10 +1345,7 @@
         updatePlatterControls();
         updateCueUI();
       });
-
-      // 7. 암레스트 복귀
-      const btnReturn = document.getElementById('btn-arm-return');
-      btnReturn.addEventListener('click', () => {
+      document.getElementById('btn-arm-return').addEventListener('click', () => {
         isArmCueUp = true;
         setTimeout(() => {
           armState = 'REST';
@@ -1406,52 +1354,45 @@
         }, 300);
       });
 
-      // 8. 아날로그 사운드 토글
-      const btnSound = document.getElementById('btn-toggle-sound');
-      btnSound.addEventListener('click', () => {
+      // 9. 사운드 토글 & 볼륨
+      document.getElementById('btn-toggle-sound').addEventListener('click', () => {
         audio.init();
         const muted = audio.toggleMute();
         const icon = document.getElementById('sound-icon');
         const text = document.getElementById('sound-text');
+        const btn = document.getElementById('btn-toggle-sound');
         if (muted) {
           icon.setAttribute('data-lucide', 'volume-x');
           text.textContent = '사운드 OFF';
-          btnSound.classList.remove('glass-btn-active');
+          btn.classList.remove('glass-btn-active');
         } else {
           icon.setAttribute('data-lucide', 'volume-2');
           text.textContent = '사운드 ON';
-          btnSound.classList.add('glass-btn-active');
+          btn.classList.add('glass-btn-active');
         }
         lucide.createIcons();
       });
+      document.getElementById('volume-slider').addEventListener('input', (e) => audio.setVolume(parseFloat(e.target.value)));
 
-      // 볼륨 슬라이더
-      document.getElementById('volume-slider').addEventListener('input', (e) => {
-        audio.setVolume(parseFloat(e.target.value));
-      });
-
-      // 9. 레이어 분해/조립 모드 토글
+      // 10. 레이어 분해 모드
       document.getElementById('btn-explode').addEventListener('click', () => {
         isExploded = !isExploded;
         const btn = document.getElementById('btn-explode');
         const text = document.getElementById('explode-text');
         if (isExploded) {
-          btn.classList.add('glass-btn-active');
-          text.textContent = '분해 해제';
+          btn.classList.add('glass-btn-active'); text.textContent = '분해 해제';
         } else {
-          btn.classList.remove('glass-btn-active');
-          text.textContent = '레이어 분해';
+          btn.classList.remove('glass-btn-active'); text.textContent = '레이어 분해';
         }
       });
 
-      // 10. 카메라 뷰포인트 프리셋 버튼
+      // 11. 카메라 프리셋
       document.querySelectorAll('.cam-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const camKey = btn.getAttribute('data-cam');
           if (CAMERA_PRESETS[camKey]) {
             targetCamPos.copy(CAMERA_PRESETS[camKey].pos);
             targetCamLook.copy(CAMERA_PRESETS[camKey].look);
-
             document.querySelectorAll('.cam-btn').forEach(b => {
               b.classList.remove('glass-btn-active');
               b.classList.add('glass-btn', 'text-zinc-400');
@@ -1461,30 +1402,18 @@
           }
         });
       });
-
-      // 카메라 리셋
       document.getElementById('btn-reset-view').addEventListener('click', () => {
-        targetCamPos.copy(CAMERA_PRESETS.quarter.pos);
-        targetCamLook.copy(CAMERA_PRESETS.quarter.look);
+        targetCamPos.copy(CAMERA_PRESETS.tonearm.pos);
+        targetCamLook.copy(CAMERA_PRESETS.tonearm.look);
       });
 
       lucide.createIcons();
-    }
-
-    function updateCartridgeUI(data) {
-      document.getElementById('detail-name').textContent = `${data.brand} ${data.name}`;
-      document.getElementById('detail-desc').textContent = data.desc;
-      document.getElementById('detail-type').textContent = data.type;
-      document.getElementById('detail-vtf').textContent = `${data.vtf} g`;
-      document.getElementById('detail-output').textContent = data.output;
-      document.getElementById('stat-vtf').textContent = `${data.vtf} g`;
     }
 
     function updatePlatterControls() {
       const btnPlatter = document.getElementById('btn-platter-toggle');
       const icon = document.getElementById('play-icon');
       const text = document.getElementById('play-text');
-
       const btn33 = document.getElementById('btn-speed-33');
       const btnStop = document.getElementById('btn-speed-stop');
       const btn45 = document.getElementById('btn-speed-45');
@@ -1503,12 +1432,12 @@
         if (Math.abs(targetRpm - 33.333) < 0.1) {
           btn33.classList.add('glass-btn-active');
           btn33.classList.remove('glass-btn', 'text-zinc-400');
-          rotaryKnobGroup.rotation.y = -0.45; // 33 RPM 포지션
+          rotaryKnobGroup.rotation.y = -0.45;
           document.getElementById('stat-rpm').textContent = '33 ⅓ RPM';
         } else {
           btn45.classList.add('glass-btn-active');
           btn45.classList.remove('glass-btn', 'text-zinc-400');
-          rotaryKnobGroup.rotation.y = 0.45;  // 45 RPM 포지션
+          rotaryKnobGroup.rotation.y = 0.45;
           document.getElementById('stat-rpm').textContent = '45 RPM';
         }
       } else {
@@ -1516,13 +1445,11 @@
         btnPlatter.classList.add('bg-teal-500', 'text-slate-950', 'hover:bg-teal-400');
         icon.setAttribute('data-lucide', 'play');
         text.textContent = '회전 시작';
-
         btnStop.classList.add('glass-btn-active');
         btnStop.classList.remove('glass-btn', 'text-zinc-400');
-        rotaryKnobGroup.rotation.y = 0;       // STOP 중앙 포지션
+        rotaryKnobGroup.rotation.y = 0;
         document.getElementById('stat-rpm').textContent = 'STOP (0 RPM)';
       }
-
       lucide.createIcons();
     }
 
@@ -1545,7 +1472,7 @@
           statArm.textContent = '소리골 재생 중';
           statArm.className = 'text-emerald-400 font-semibold';
         } else {
-          statArm.textContent = '암레스트 대기';
+          statArm.textContent = '암레스트 안착';
           statArm.className = 'text-zinc-400 font-semibold';
         }
       }
@@ -1559,34 +1486,29 @@
 
     function animate() {
       requestAnimationFrame(animate);
-
       const now = performance.now();
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // 1. 플래터 회전 물리 (관성 가감속)
+      // 플래터 회전 물리
       const targetSpeed = isPlatterSpinning ? (targetRpm * Math.PI * 2) / 60 : 0;
       currentPlatterSpeed += (targetSpeed - currentPlatterSpeed) * (isPlatterSpinning ? 0.08 : 0.03);
-
       if (Math.abs(currentPlatterSpeed) > 0.001) {
         platterRotationAngle += currentPlatterSpeed * dt;
         platterMeshGroup.rotation.y = platterRotationAngle;
       }
 
-      // 2. 큐잉 리프트 부드러운 유압 댐퍼 보간
+      // 큐잉 리프트 부드러운 유압 댐퍼 보간
       const targetCueProgress = isArmCueUp ? 1 : 0;
       cueProgress += (targetCueProgress - cueProgress) * 0.12;
-      tonearmVerticalGimbal.rotation.x = -cueProgress * 0.045; // 위로 살짝 들림
+      tonearmVerticalGimbal.rotation.x = -cueProgress * 0.045;
       tonearmVerticalGimbal.position.y = cueProgress * 4.5;
 
-      // 3. 톤암 수평 회전 및 소리골 트래킹
+      // 톤암 소리골 트래킹
       if (armState === 'TRACKING') {
-        // 플래터가 돌고 바늘이 내려와 있을 때 안쪽으로 소리골 트래킹 이동
         if (isPlatterSpinning && !isArmCueUp && currentPlatterSpeed > 1.0) {
-          const trackSpeed = 0.0007; // 소리골 이동 속도
-          currentArmAngle += trackSpeed * dt;
+          currentArmAngle += 0.0007 * dt;
           if (currentArmAngle > ARM_ANGLE_LEAD_OUT) {
-            // 끝까지 도달하면 자동 큐잉 상승 및 정지
             isArmCueUp = true;
             updateCueUI();
           }
@@ -1594,14 +1516,12 @@
       }
       tonearmHorizontalArm.rotation.y = -currentArmAngle;
 
-      // 4. 오디오 엔진 사운드 상태 실시간 반영
-      const isNeedleContact = (!isArmCueUp && armState === 'TRACKING');
-      audio.updateState(isPlatterSpinning && currentPlatterSpeed > 1.0, isNeedleContact);
+      // 오디오 상태
+      audio.updateState(isPlatterSpinning && currentPlatterSpeed > 1.0, (!isArmCueUp && armState === 'TRACKING'));
 
-      // 5. 5대 계층 레이어 분해/조립 애니메이션
+      // 레이어 분해
       const targetExplode = isExploded ? 1 : 0;
       explodeProgress += (targetExplode - explodeProgress) * 0.08;
-
       if (explodeProgress > 0.001) {
         layer1_PlinthGroup.position.y = -explodeProgress * 35;
         layer2_PlatterGroup.position.y = explodeProgress * 35;
@@ -1614,7 +1534,7 @@
         layer4_TonearmGroup.position.y = 0;
       }
 
-      // 6. 카메라 부드러운 전환 보간
+      // 카메라 보간
       camera.position.lerp(targetCamPos, 0.06);
       controls.target.lerp(targetCamLook, 0.06);
       controls.update();
@@ -1622,14 +1542,12 @@
       renderer.render(scene, camera);
     }
 
-    // 윈도우 리사이즈 대응
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // 시작
     initUI();
     animate();
   </script>
